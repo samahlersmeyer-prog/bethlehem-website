@@ -1,0 +1,13 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bethlehem Lutheran Church</title><link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>body{margin:0;font:17px/1.6 system-ui,sans-serif;background:#0f1f45;color:#f4f2ec;display:grid;place-items:center;min-height:100vh;padding:24px;box-sizing:border-box;text-align:center}a{color:#7cc4f2}</style>
+<script>
+(function(){
+  var map={"/about/worship-services.cfm": "#worship", "/about/directions.cfm": "#visit", "/about/our-beliefs.cfm": "#beliefs", "/about/our-history.cfm": "#our-story", "/about/staff.cfm": "#about", "/about/contact.cfm": "#visit", "/about/donate.cfm": "#give", "/news/announcements.cfm": "#bulletins", "/news/messenger.cfm": "#messenger", "/calendar.cfm": "#calendar", "/news/bulletins.cfm": "#bulletins", "/church-life/schedules.cfm": "#schedules", "/ministries/food-bank.cfm": "#food-bank", "/ministries/stephen-ministry.cfm": "#stephen-ministry", "/missions/liberianchildrensmission.cfm": "#liberia", "/missions/campus-crusade-for-christ.cfm": "#agape-france", "/church-life/bible-study.cfm": "#bible-study", "/church-life/christcare.cfm": "#christ-care", "/church-life/womenofbethlehem.cfm": "#women", "/church-life/childrens-church.cfm": "#sonshine", "/church-life/choir.cfm": "#music", "/church-life/bells.cfm": "#music"};
+  var p=location.pathname.toLowerCase().replace(/\/+$/,'');
+  var base=p.indexOf('/bethlehem-website')===0?'/bethlehem-website/':'/';
+  var key=p.replace(/^\/bethlehem-website/,'');
+  location.replace(base+(map[key]||''));
+})();
+</script></head>
+<body><p>This page has moved. <a href="/">Go to the Bethlehem home page</a>.</p></body></html>

@@ -1,5 +1,9 @@
 # Bethlehem Lutheran Church website
 
-Redesign of [bethlehemlcms.org](https://bethlehemlcms.org) — Bethlehem Lutheran Church (LCMS), Fort Wayne.
+Static website for Bethlehem Lutheran Church (LCMS), 3705 S. Anthony Blvd., Fort Wayne, IN.
 
-The whole site is a single self-contained `index.html` (styles, scripts and images are embedded). Open it in a browser to preview, or upload it to the web host to publish.
+- `index.html` is the whole site (home, Church Life, News and Our Story pages).
+- `images/` holds the photos.
+- `404.html` forwards old bethlehemlcms.org page addresses to the matching section.
+
+Hosted with GitHub Pages. Every change pushed to `main` goes live within a minute or two.
