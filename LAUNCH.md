@@ -7,7 +7,7 @@
       or put them in a shared Google Drive folder.
 - [ ] Luke exports the current DNS records from IONOS (screenshot is fine). **Keep every MX, TXT (SPF/DKIM) and
       mail-related record exactly as it is, so church email keeps working.**
-- [ ] Confirm Pastor Ben's email domain: the site lists `pastorben@bethlehemlcms.com`, but the site is `.org`.
+- [ ] Church email is moving to blcfw.org later; until then the site keeps the current addresses.
 
 ## The switch (about 15 minutes, then up to a few hours for DNS)
 1. In this repo: **Settings → Pages → Custom domain** → `www.blcfw.org` → Save.
@@ -20,8 +20,7 @@
 3. Back in **Settings → Pages**, wait for the DNS check to pass, then turn on **Enforce HTTPS**.
 
 ## After the switch
-- [ ] Open `bethlehemlcms.org`, `www.blcfw.org` and an old address (`/about/our-beliefs.cfm`), which should
-      land on the matching section.
+- [ ] Open `blcfw.org` and `www.blcfw.org`.
 - [ ] Send a test email to the church addresses to confirm email still arrives.
 - [ ] In the worship planner's Firebase project, add `www.blcfw.org` under Authentication → Authorized domains
       only if the planner is ever opened from that domain (not needed for the public feed).
