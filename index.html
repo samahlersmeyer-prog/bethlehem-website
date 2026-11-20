@@ -521,11 +521,8 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
         <p class="ts-sermon" id="tsSermon" hidden></p>
         <dl class="ts-readings" id="tsReadings"></dl>
         <p class="ts-actions"><a class="btn btn-gold" id="tsBulletin" href="#" target="_blank" rel="noopener" hidden>Open this week's bulletin</a></p>
-        <details class="ts-order" id="tsOrderBox" hidden><summary>Order of service</summary><ol id="tsOrder"></ol></details>
       </div>
       <div class="ts-side">
-        <h3 id="tsHymnsHead" hidden>Hymns</h3>
-        <ul class="ts-hymns" id="tsHymns"></ul>
         <h3 id="tsNextHead" hidden>Coming up</h3>
         <ul class="ts-next" id="tsNext"></ul>
       </div>
@@ -545,12 +542,6 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
     .ts-hymns b{color:var(--ink);font-weight:600}
     .ts-next span{font-family:var(--mono);font-size:.8rem;color:var(--gold-ink);margin-right:8px}
     .ts-actions{margin:20px 0 0}
-    .ts-order{margin-top:18px;border-top:1px solid rgba(0,0,0,.12);padding-top:12px}
-    .ts-order summary{cursor:pointer;font-weight:600;color:var(--ink)}
-    .ts-order ol{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:6px}
-    .ts-order li{display:grid;grid-template-columns:minmax(9rem,max-content) 1fr;gap:12px;color:var(--ink-2)}
-    .ts-order li b{font-weight:600;color:var(--ink)}
-    @media (max-width:560px){.ts-order li{grid-template-columns:1fr;gap:0}}
   </style>
   <script>
   // Filled from the worship planner (bethlehem-worship.web.app/public/this-sunday.json):
@@ -659,6 +650,17 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
         bl.hidden = false;
       }
 
+      // The Messenger from the planner, newest first; the older issues stay below
+      var ml = $('messengerFeed');
+      if (ml && data.messengers && data.messengers.length) {
+        data.messengers.forEach(function (m) {
+          var li = el('li'), a = el('a'); a.href = m.url; a.target = '_blank'; a.rel = 'noopener';
+          a.appendChild(el('span', m.month, 'doc-title')); a.appendChild(el('span', 'Messenger', 'doc-type'));
+          li.appendChild(a); ml.appendChild(li);
+        });
+        ml.hidden = false;
+      }
+
       // This Sunday
       var t = data.thisSunday; if (!t) return;
       var sun = d(t.date), sat = new Date(sun.getTime() - 864e5);
@@ -667,20 +669,8 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
       $('tsName').textContent = t.name;
       if (t.sermonTitle) { var s = $('tsSermon'); s.textContent = '“' + t.sermonTitle + '”' + (t.preacher ? ' — ' + t.preacher : ''); s.hidden = false; }
       var dl = $('tsReadings');
-      if (t.readings) Object.keys(t.readings).forEach(function (k) { dl.appendChild(el('dt', k)); dl.appendChild(el('dd', t.readings[k])); });
-      var hy = $('tsHymns');
-      (t.hymns || []).forEach(function (h) { var li = el('li'); li.appendChild(el('b', h.label + ': ')); li.appendChild(document.createTextNode(h.hymn.replace(/"/g, ''))); hy.appendChild(li); });
-      if (hy.children.length) $('tsHymnsHead').hidden = false;
+      if (t.readings) Object.keys(t.readings).filter(function (k) { return k !== 'Psalm'; }).forEach(function (k) { dl.appendChild(el('dt', k)); dl.appendChild(el('dd', t.readings[k])); });
       if (t.bulletinUrl) { var bb = $('tsBulletin'); bb.href = t.bulletinUrl; bb.hidden = false; }
-      if (t.order && t.order.length) {
-        var R = t.readings || {}, fill = { 'First Reading': R['First Reading'], 'Old Testament Reading': R['First Reading'], 'Epistle': R.Epistle, 'Epistle Reading': R.Epistle, 'Gospel': R.Gospel, 'Gospel Reading': R.Gospel, 'Psalm': R.Psalm };
-        var ol = $('tsOrder');
-        t.order.forEach(function (o) {
-          var v = (o.value || fill[o.label] || '').replace(/"/g, ''); if (/^none$/i.test(v)) return;
-          var li = el('li'); li.appendChild(el('b', o.label)); li.appendChild(el('span', v)); ol.appendChild(li);
-        });
-        if (ol.children.length) $('tsOrderBox').hidden = false;
-      }
       var nx = $('tsNext');
       (data.upcoming || []).slice(0, 3).forEach(function (u) { var li = el('li'); li.appendChild(el('span', md(d(u.date)))); li.appendChild(document.createTextNode(u.name + (u.sermonTitle ? ' — “' + u.sermonTitle + '”' : ''))); nx.appendChild(li); });
       if (nx.children.length) $('tsNextHead').hidden = false;
@@ -725,7 +715,7 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
               <button class="link-btn copy" data-copy="bethfw@yahoo.com" type="button">Email bethfw@yahoo.com</button>
             </div>
             <div class="contact-list">
-              <span><b>Office hours</b> · Monday–Friday, 10:00 am–4:00 pm</span>
+              <span><b>Office hours</b> · Monday–Friday, 9:00 am–1:00 pm</span>
               <span><b>Fax</b> · (260) 744-3229</span>
             </div>
           </div>
@@ -741,7 +731,7 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
       <div class="section-head">
         <p class="eyebrow">What we believe</p>
         <h2>Saved by grace, through faith, in Christ alone</h2>
-        <p class="lede">As a congregation of the Lutheran Church–Missouri Synod, we confess the faith taught in Holy Scripture and summarized in the Lutheran Confessions. Here is the heart of those teachings.</p>
+        <p class="lede">As a congregation of the <a href="https://www.lcms.org/" target="_blank" rel="noopener">Lutheran Church–Missouri Synod</a>, we confess the faith taught in Holy Scripture and summarized in the Lutheran Confessions. Here is the heart of those teachings.</p>
       </div>
       <ol class="beliefs">
           <li><h3>Scripture</h3><span class="ref">2 Timothy 3:15–16</span><p>The Bible is God's inspired Word, written by holy men and without error.</p></li>
@@ -779,7 +769,7 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
         </a>
         <div class="notice">
           <span class="eyebrow">Church office</span>
-          <h3>Open weekdays 10–4</h3>
+          <h3>Open weekdays 9–1</h3>
           <p>Call (260) 744-3228 or email bethfw@yahoo.com with prayer requests, questions or news to share.</p>
         </div>
       </div>
@@ -1301,7 +1291,8 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
 
     <section id="messenger"><div class="wrap split">
       <div class="section-head"><p class="eyebrow">Monthly newsletter</p><h2>The Messenger</h2><p class="lede">Bethlehem's monthly newsletter, with news and the month ahead.</p></div>
-      <ul class="doc-list">
+      <div><ul class="doc-list" id="messengerFeed" hidden></ul>
+      <ul class="doc-list" id="messengerOld">
           <li><a href="https://www.bethlehemlcms.org/editoruploads/files/MESSENGER/September2026messenger%20.pdf" target="_blank" rel="noopener"><span class="doc-title">September 2026</span><span class="doc-type">PDF</span></a></li>
           <li><a href="https://www.bethlehemlcms.org/editoruploads/files/MESSENGER/August%20Messenger%202026.pdf" target="_blank" rel="noopener"><span class="doc-title">August 2026</span><span class="doc-type">PDF</span></a></li>
           <li><a href="https://www.bethlehemlcms.org/editoruploads/files/MESSENGER/July%20Messenger%202026.pdf" target="_blank" rel="noopener"><span class="doc-title">July 2026</span><span class="doc-type">PDF</span></a></li>
@@ -1313,7 +1304,7 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
           <li><a href="https://www.bethlehemlcms.org/editoruploads/files/MESSENGER/December%20Messenger%202025.pdf" target="_blank" rel="noopener"><span class="doc-title">December 2025</span><span class="doc-type">PDF</span></a></li>
           <li><a href="https://www.bethlehemlcms.org/editoruploads/files/MESSENGER/November%20Messenger%202025.pdf" target="_blank" rel="noopener"><span class="doc-title">November 2025</span><span class="doc-type">PDF</span></a></li>
           <li><a href="https://www.bethlehemlcms.org/editoruploads/files/MESSENGER/October%20Messenger%202025.pdf" target="_blank" rel="noopener"><span class="doc-title">October 2025</span><span class="doc-type">PDF</span></a></li>
-      </ul>
+      </ul></div>
     </div></section>
 
     <section id="schedules"><div class="wrap ministry">
@@ -1336,11 +1327,11 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
 <rect opacity=".35" x="133.2" y="151.6" width="526.1" height="2" fill="currentColor"/>
 <path transform="translate(251.9,187.6)" d="M2.379 0.0 2.392 -18.798H5.213V-2.444H13.897V0.0Z M26.519999999999996 0.26Q23.997999999999998 0.26 22.444499999999998 -0.572Q20.891 -1.404 20.182499999999997 -3.0029999999999997Q19.474 -4.601999999999999 19.474 -6.903V-18.798H22.346999999999998V-6.552Q22.346999999999998 -4.316 23.445499999999996 -3.2305Q24.543999999999997 -2.145 26.519999999999996 -2.145Q27.833 -2.145 28.7885 -2.6195Q29.744 -3.094 30.250999999999998 -4.0755Q30.758 -5.0569999999999995 30.758 -6.552V-18.798H33.57899999999999V-6.6819999999999995Q33.57899999999999 -4.484999999999999 32.851 -2.9314999999999998Q32.123 -1.378 30.569499999999998 -0.5589999999999999Q29.016 0.26 26.519999999999996 0.26Z M44.083 0.0V-16.262999999999998H38.129V-18.798H52.571999999999996V-16.262999999999998H46.89099999999999V0.0Z M57.60299999999999 0.0V-18.798H60.38499999999999V-10.92H70.005V-18.798H72.78699999999999V0.0H70.005V-8.501999999999999H60.38499999999999V0.0Z M79.625 0.0V-18.798H91.767L91.75399999999999 -16.38H82.41999999999999V-10.673H90.753V-8.294H82.407V-2.457L91.988 -2.444V0.0Z M97.942 0.0V-18.798H105.40399999999998Q107.49699999999999 -18.798 108.87499999999999 -18.1545Q110.25299999999999 -17.511 110.92899999999999 -16.328Q111.60499999999999 -15.145 111.60499999999999 -13.533Q111.60499999999999 -12.011999999999999 111.0915 -10.998Q110.57799999999999 -9.984 109.76549999999999 -9.347Q108.95299999999999 -8.709999999999999 108.05599999999998 -8.346L111.69599999999998 0.0H108.77099999999999L105.44299999999998 -7.864999999999999H100.72399999999999V0.0ZM100.72399999999999 -10.113999999999999H104.64999999999999Q106.61299999999999 -10.113999999999999 107.69199999999998 -10.965499999999999Q108.77099999999999 -11.817 108.77099999999999 -13.402999999999999Q108.77099999999999 -14.963 107.78949999999999 -15.768999999999998Q106.80799999999999 -16.575 105.13099999999999 -16.575H100.72399999999999Z M116.33699999999997 0.0 123.12299999999998 -18.798H126.19099999999997L132.96399999999997 0.0H130.15599999999998L128.38799999999998 -4.927H120.93899999999998L119.15799999999999 0.0ZM121.62799999999999 -7.449H127.65999999999998L124.64399999999998 -16.093999999999998Z M138.39799999999997 0.0V-18.798H141.08899999999997L150.65699999999998 -4.784V-18.798H153.45199999999997V0.0H150.956L141.17999999999998 -14.312999999999999V0.0Z M175.656 0.26Q173.108 0.26 171.288 -0.9165Q169.468 -2.093 168.4995 -4.2705Q167.531 -6.4479999999999995 167.531 -9.49Q167.531 -12.519 168.493 -14.657499999999999Q169.45499999999998 -16.796 171.27499999999998 -17.927Q173.095 -19.058 175.656 -19.058Q177.684 -19.058 179.257 -18.226Q180.82999999999998 -17.394 181.78549999999998 -15.989999999999998Q182.74099999999999 -14.585999999999999 182.923 -12.883H179.959Q179.764 -13.949 179.2115 -14.8135Q178.659 -15.677999999999999 177.749 -16.1785Q176.839 -16.679 175.591 -16.679Q173.992 -16.679 172.874 -15.924999999999999Q171.756 -15.171 171.1775 -13.572Q170.599 -11.972999999999999 170.599 -9.450999999999999Q170.599 -5.6419999999999995 171.886 -3.8804999999999996Q173.173 -2.1189999999999998 175.591 -2.1189999999999998Q176.839 -2.1189999999999998 177.749 -2.6585Q178.659 -3.198 179.2115 -4.1015Q179.764 -5.005 179.959 -6.071H182.923Q182.767 -4.835999999999999 182.273 -3.6984999999999997Q181.779 -2.561 180.9015 -1.664Q180.024 -0.767 178.724 -0.2535Q177.424 0.26 175.656 0.26Z M188.734 0.0V-18.798H191.51600000000002V-10.92H201.13600000000002V-18.798H203.918V0.0H201.13600000000002V-8.501999999999999H191.51600000000002V0.0Z M217.80200000000005 0.26Q215.28000000000003 0.26 213.72650000000004 -0.572Q212.17300000000003 -1.404 211.46450000000004 -3.0029999999999997Q210.75600000000003 -4.601999999999999 210.75600000000003 -6.903V-18.798H213.62900000000005V-6.552Q213.62900000000005 -4.316 214.72750000000005 -3.2305Q215.82600000000005 -2.145 217.80200000000005 -2.145Q219.11500000000004 -2.145 220.07050000000004 -2.6195Q221.02600000000004 -3.094 221.53300000000004 -4.0755Q222.04000000000005 -5.0569999999999995 222.04000000000005 -6.552V-18.798H224.86100000000005V-6.6819999999999995Q224.86100000000005 -4.484999999999999 224.13300000000004 -2.9314999999999998Q223.40500000000003 -1.378 221.85150000000004 -0.5589999999999999Q220.29800000000003 0.26 217.80200000000005 0.26Z M231.21800000000005 0.0V-18.798H238.68000000000006Q240.77300000000005 -18.798 242.15100000000007 -18.1545Q243.52900000000005 -17.511 244.20500000000004 -16.328Q244.88100000000006 -15.145 244.88100000000006 -13.533Q244.88100000000006 -12.011999999999999 244.36750000000006 -10.998Q243.85400000000004 -9.984 243.04150000000004 -9.347Q242.22900000000004 -8.709999999999999 241.33200000000005 -8.346L244.97200000000007 0.0H242.04700000000005L238.71900000000005 -7.864999999999999H234.00000000000006V0.0ZM234.00000000000006 -10.113999999999999H237.92600000000004Q239.88900000000007 -10.113999999999999 240.96800000000007 -10.965499999999999Q242.04700000000005 -11.817 242.04700000000005 -13.402999999999999Q242.04700000000005 -14.963 241.06550000000004 -15.768999999999998Q240.08400000000006 -16.575 238.40700000000007 -16.575H234.00000000000006Z M258.12800000000004 0.26Q255.58000000000007 0.26 253.76000000000005 -0.9165Q251.94000000000005 -2.093 250.97150000000005 -4.2705Q250.00300000000007 -6.4479999999999995 250.00300000000007 -9.49Q250.00300000000007 -12.519 250.96500000000006 -14.657499999999999Q251.92700000000005 -16.796 253.74700000000007 -17.927Q255.56700000000006 -19.058 258.12800000000004 -19.058Q260.15600000000006 -19.058 261.72900000000004 -18.226Q263.3020000000001 -17.394 264.25750000000005 -15.989999999999998Q265.2130000000001 -14.585999999999999 265.39500000000004 -12.883H262.43100000000004Q262.23600000000005 -13.949 261.6835000000001 -14.8135Q261.1310000000001 -15.677999999999999 260.22100000000006 -16.1785Q259.31100000000004 -16.679 258.06300000000005 -16.679Q256.46400000000006 -16.679 255.34600000000006 -15.924999999999999Q254.22800000000007 -15.171 253.64950000000005 -13.572Q253.07100000000005 -11.972999999999999 253.07100000000005 -9.450999999999999Q253.07100000000005 -5.6419999999999995 254.35800000000006 -3.8804999999999996Q255.64500000000007 -2.1189999999999998 258.06300000000005 -2.1189999999999998Q259.31100000000004 -2.1189999999999998 260.22100000000006 -2.6585Q261.1310000000001 -3.198 261.6835000000001 -4.1015Q262.23600000000005 -5.005 262.43100000000004 -6.071H265.39500000000004Q265.23900000000003 -4.835999999999999 264.74500000000006 -3.6984999999999997Q264.2510000000001 -2.561 263.37350000000004 -1.664Q262.49600000000004 -0.767 261.196 -0.2535Q259.8960000000001 0.26 258.12800000000004 0.26Z M271.2060000000001 0.0V-18.798H273.98800000000006V-10.92H283.60800000000006V-18.798H286.39000000000004V0.0H283.60800000000006V-8.501999999999999H273.98800000000006V0.0Z" fill="currentColor"/>
 </svg></a>
-      <p style="margin-top:12px;color:var(--ink-2)">3705 S. Anthony Blvd.<br>Fort Wayne, IN 46806<br>(260) 744-3228 · bethfw@yahoo.com<br>Pastor Ben · pastorben@bethlehemlcms.com<br>Office open Mon–Fri, 10 am–4 pm</p>
+      <p style="margin-top:12px;color:var(--ink-2)">3705 S. Anthony Blvd.<br>Fort Wayne, IN 46806<br>(260) 744-3228 · bethfw@yahoo.com<br>Pastor Ben · pastorben@bethlehemlcms.com<br>Office open Mon–Fri, 9 am–1 pm</p>
     </div>
     <div><h4>Worship</h4><ul><li>Saturday 4:00 pm</li><li>Sunday 9:00 am</li><li>Education hour 10:30 am</li></ul></div>
     <div><h4>Explore</h4><ul><li><a href="#visit">Plan a visit</a></li><li><a href="#food-bank">Food bank</a></li><li><a href="#mission">Mission &amp; values</a></li><li><a href="#history">Our history</a></li><li><a href="#our-story">Full centennial history</a></li><li><a href="#beliefs">What we believe</a></li></ul></div>
-    <div><h4>Connect</h4><ul><li><a href="https://www.facebook.com/bethlehemfortwayne" target="_blank" rel="noopener">Facebook &amp; livestream</a></li><li><a href="https://wallet.subsplash.com/ui/embed/235RJV/" target="_blank" rel="noopener">Give online</a></li><li><a href="https://www.ctsfw.edu/" target="_blank" rel="noopener">Concordia Theological Seminary</a></li><li><a href="https://www.lcms.org/" target="_blank" rel="noopener">The LCMS</a></li></ul></div>
+    <div><h4>Connect</h4><ul><li><a href="https://www.facebook.com/bethlehemfortwayne" target="_blank" rel="noopener">Facebook &amp; livestream</a></li><li hidden><a id="lnkSubstack" href="SUBSTACK_URL" target="_blank" rel="noopener">Substack</a></li><li hidden><a id="lnkInstagram" href="INSTAGRAM_URL" target="_blank" rel="noopener">Instagram</a></li><li><a href="https://wallet.subsplash.com/ui/embed/235RJV/" target="_blank" rel="noopener">Give online</a></li><li><a href="https://www.ctsfw.edu/" target="_blank" rel="noopener">Concordia Theological Seminary</a></li><li><a href="https://www.lcms.org/" target="_blank" rel="noopener">The LCMS</a></li></ul></div>
   </div>
   <div class="legal"><div class="wrap"><span>© <span id="yr">2026</span> Bethlehem Lutheran Church</span><span>A congregation of the Lutheran Church–Missouri Synod</span></div></div>
 </footer>
