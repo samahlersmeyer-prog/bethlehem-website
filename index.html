@@ -197,7 +197,7 @@ section + section{border-top:1px solid var(--line)}
 .date .d{font-family:var(--display);font-size:2rem;line-height:1;font-variant-numeric:tabular-nums}
 .event .name{font-weight:600}
 .event .when{color:var(--ink-2);font-size:.9rem}
-.event.feast .name::after{content:"Reformation Day";display:inline-block;margin-left:8px;font-size:.68rem;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:3px;background:#b33a2e;color:#fff;vertical-align:2px}
+
 .notices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-bottom:28px}
 @media (max-width:860px){.notices{grid-template-columns:1fr}}
 .notice{display:grid;gap:6px;align-content:start;padding:20px 22px;border-radius:var(--radius);background:var(--gold-soft);text-decoration:none}
@@ -520,6 +520,8 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
         <h2 id="tsName"></h2>
         <p class="ts-sermon" id="tsSermon" hidden></p>
         <dl class="ts-readings" id="tsReadings"></dl>
+        <p class="ts-actions"><a class="btn btn-gold" id="tsBulletin" href="#" target="_blank" rel="noopener" hidden>Open this week's bulletin</a></p>
+        <details class="ts-order" id="tsOrderBox" hidden><summary>Order of service</summary><ol id="tsOrder"></ol></details>
       </div>
       <div class="ts-side">
         <h3 id="tsHymnsHead" hidden>Hymns</h3>
@@ -542,31 +544,150 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
     .ts-hymns,.ts-next{list-style:none;margin:0 0 22px;padding:0;display:grid;gap:6px;color:var(--ink-2)}
     .ts-hymns b{color:var(--ink);font-weight:600}
     .ts-next span{font-family:var(--mono);font-size:.8rem;color:var(--gold-ink);margin-right:8px}
+    .ts-actions{margin:20px 0 0}
+    .ts-order{margin-top:18px;border-top:1px solid rgba(0,0,0,.12);padding-top:12px}
+    .ts-order summary{cursor:pointer;font-weight:600;color:var(--ink)}
+    .ts-order ol{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:6px}
+    .ts-order li{display:grid;grid-template-columns:minmax(9rem,max-content) 1fr;gap:12px;color:var(--ink-2)}
+    .ts-order li b{font-weight:600;color:var(--ink)}
+    @media (max-width:560px){.ts-order li{grid-template-columns:1fr;gap:0}}
   </style>
   <script>
+  // Filled from the worship planner (bethlehem-worship.web.app/public/this-sunday.json):
+  // This Sunday box, order of service (once final), the calendars and the bulletin list.
+  // If the feed can't load, the calendars still show the regular weekly schedule.
   (function () {
+   function run() {
     var URL = 'https://bethlehem-worship.web.app/public/this-sunday.json';
     var M = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    var DOWL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     function d(iso) { var p = iso.split('-'); return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2])); }
+    function iso(dt) { return dt.toISOString().slice(0, 10); }
     function md(dt) { return M[dt.getUTCMonth()] + ' ' + dt.getUTCDate(); }
     function el(tag, txt, cls) { var e = document.createElement(tag); if (txt != null) e.textContent = txt; if (cls) e.className = cls; return e; }
+    function $(id) { return document.getElementById(id); }
+    function mins(t) { if (!t) return -1; var m = t.match(/(\d+):(\d+)\s*(am|pm)/i); var h = +m[1] % 12 + (/pm/i.test(m[3]) ? 12 : 0); return h * 60 + +m[2]; }
+    var FEAST = { white: 1, gold: 1, red: 1, scarlet: 1 };
+
+    // Today in Fort Wayne
+    var today = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Indiana/Indianapolis' }).format(new Date());
+
+    // Regular weekly items that aren't in the planner
+    function weekly(from, days) {
+      var out = [], t = d(from);
+      for (var i = 0; i <= days; i++) {
+        var x = new Date(t.getTime() + i * 864e5), w = x.getUTCDay(), k = iso(x);
+        if (w === 6) out.push({ date: k, time: '8:30 am', name: "Men's Bible Study", weekly: true });
+        if (w === 0) out.push({ date: k, time: '10:30 am', name: 'Education Hour', weekly: true });
+      }
+      return out;
+    }
+    // Fallback worship times when the planner feed isn't available
+    function worship(from, days) {
+      var out = [], t = d(from);
+      for (var i = 0; i <= days; i++) {
+        var x = new Date(t.getTime() + i * 864e5), w = x.getUTCDay();
+        if (w === 6) out.push({ date: iso(x), time: '4:00 pm', name: 'Worship with Communion', worship: true });
+        if (w === 0) out.push({ date: iso(x), time: '9:00 am', name: 'Worship with Communion', worship: true });
+      }
+      return out;
+    }
+    function sortItems(a) { return a.sort(function (x, y) { return x.date.localeCompare(y.date) || mins(x.time) - mins(y.time); }); }
+
+    function renderCalendars(items) {
+      // Home: the next eight services (weekly classes are listed on the News page)
+      var home = $('homeEvents');
+      if (home) {
+        home.textContent = '';
+        items.filter(function (it) { return !it.weekly; }).slice(0, 8).forEach(function (it) {
+          var dt = d(it.date), ev = el('div', null, 'event');
+          var dd = el('div', null, 'date'); dd.appendChild(el('div', M[dt.getUTCMonth()], 'm')); dd.appendChild(el('div', String(dt.getUTCDate()), 'd'));
+          var tx = el('div'); tx.appendChild(el('div', it.worship ? (it.day || 'Worship with Communion') : it.name, 'name'));
+          tx.appendChild(el('div', DOWL[dt.getUTCDay()] + (it.time ? ' · ' + it.time : '') + (it.worship && it.day ? ' · Communion' : ''), 'when'));
+          ev.appendChild(dd); ev.appendChild(tx); home.appendChild(ev);
+        });
+      }
+      // News page: grouped by date, about three weeks
+      var cal = $('calList');
+      if (cal) {
+        cal.textContent = '';
+        var groups = [], by = {};
+        items.forEach(function (it) { if (!by[it.date]) { by[it.date] = []; groups.push(it.date); } by[it.date].push(it); });
+        groups.slice(0, 12).forEach(function (k) {
+          var dt = d(k), li = el('li');
+          var dd = el('div', null, 'date'); dd.appendChild(el('div', M[dt.getUTCMonth()], 'm')); dd.appendChild(el('div', String(dt.getUTCDate()), 'd'));
+          var tx = el('div'); tx.appendChild(el('div', DOW[dt.getUTCDay()], 'dow'));
+          by[k].forEach(function (it) {
+            var row = el('div', null, 'cal-item'); if (it.time) row.appendChild(el('span', it.time, 't'));
+            row.appendChild(document.createTextNode(it.worship ? 'Worship with Communion' + (it.day ? ' · ' + it.day : '') : it.name));
+            tx.appendChild(row);
+          });
+          li.appendChild(dd); li.appendChild(tx); cal.appendChild(li);
+        });
+      }
+    }
+
+    // Show the regular schedule right away, then upgrade it from the planner
+    renderCalendars(sortItems(worship(today, 21).concat(weekly(today, 21))));
+
     fetch(URL, { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (data) {
-      var t = data && data.thisSunday; if (!t) return;
+      if (!data) return;
+
+      // Calendars: planner services + regular weekly items
+      if (data.calendar && data.calendar.length) {
+        var svc = data.calendar.filter(function (c) { return c.date >= today; }).map(function (c) {
+          var w = d(c.date).getUTCDay(), regular = (w === 6 && c.time === '4:00 pm') || (w === 0 && c.time === '9:00 am');
+          // Ordinary Sundays read "Worship with Communion"; feasts and special services show their name
+          var plain = /Sunday after (Pentecost|the Epiphany|Epiphany)/.test(c.name) && !FEAST[c.color];
+          return regular ? { date: c.date, time: c.time, name: c.name, worship: true, day: plain ? '' : c.name }
+                         : { date: c.date, time: c.time, name: c.name };
+        });
+        var last = svc.length ? svc[svc.length - 1].date : today;
+        var span = Math.min(56, Math.round((d(last) - d(today)) / 864e5));
+        renderCalendars(sortItems(svc.concat(weekly(today, span))));
+      }
+
+      // Bulletins from the planner, newest first; the older list stays below
+      var bl = $('bulletinFeed');
+      if (bl && data.bulletins && data.bulletins.length) {
+        data.bulletins.forEach(function (b) {
+          var li = el('li'), a = el('a'); a.href = b.url; a.target = '_blank'; a.rel = 'noopener';
+          a.appendChild(el('span', md(d(b.date)), 'doc-date')); a.appendChild(el('span', b.name, 'doc-title')); a.appendChild(el('span', 'Bulletin', 'doc-type'));
+          li.appendChild(a); bl.appendChild(li);
+        });
+        bl.hidden = false;
+      }
+
+      // This Sunday
+      var t = data.thisSunday; if (!t) return;
       var sun = d(t.date), sat = new Date(sun.getTime() - 864e5);
       var isSun = sun.getUTCDay() === 0;
-      document.getElementById('tsWhen').textContent = 'This weekend · ' + (isSun ? 'Sat ' + md(sat) + ' & Sun ' + md(sun) : md(sun));
-      document.getElementById('tsName').textContent = t.name;
-      if (t.sermonTitle) { var s = document.getElementById('tsSermon'); s.textContent = '\u201C' + t.sermonTitle + '\u201D' + (t.preacher ? ' \u2014 ' + t.preacher : ''); s.hidden = false; }
-      var dl = document.getElementById('tsReadings');
+      $('tsWhen').textContent = 'This weekend · ' + (isSun ? 'Sat ' + md(sat) + ' & Sun ' + md(sun) : md(sun));
+      $('tsName').textContent = t.name;
+      if (t.sermonTitle) { var s = $('tsSermon'); s.textContent = '“' + t.sermonTitle + '”' + (t.preacher ? ' — ' + t.preacher : ''); s.hidden = false; }
+      var dl = $('tsReadings');
       if (t.readings) Object.keys(t.readings).forEach(function (k) { dl.appendChild(el('dt', k)); dl.appendChild(el('dd', t.readings[k])); });
-      var hy = document.getElementById('tsHymns');
+      var hy = $('tsHymns');
       (t.hymns || []).forEach(function (h) { var li = el('li'); li.appendChild(el('b', h.label + ': ')); li.appendChild(document.createTextNode(h.hymn.replace(/"/g, ''))); hy.appendChild(li); });
-      if (hy.children.length) document.getElementById('tsHymnsHead').hidden = false;
-      var nx = document.getElementById('tsNext');
-      (data.upcoming || []).slice(0, 3).forEach(function (u) { var li = el('li'); li.appendChild(el('span', md(d(u.date)))); li.appendChild(document.createTextNode(u.name + (u.sermonTitle ? ' \u2014 \u201C' + u.sermonTitle + '\u201D' : ''))); nx.appendChild(li); });
-      if (nx.children.length) document.getElementById('tsNextHead').hidden = false;
-      document.getElementById('this-sunday').hidden = false;
+      if (hy.children.length) $('tsHymnsHead').hidden = false;
+      if (t.bulletinUrl) { var bb = $('tsBulletin'); bb.href = t.bulletinUrl; bb.hidden = false; }
+      if (t.order && t.order.length) {
+        var R = t.readings || {}, fill = { 'First Reading': R['First Reading'], 'Old Testament Reading': R['First Reading'], 'Epistle': R.Epistle, 'Epistle Reading': R.Epistle, 'Gospel': R.Gospel, 'Gospel Reading': R.Gospel, 'Psalm': R.Psalm };
+        var ol = $('tsOrder');
+        t.order.forEach(function (o) {
+          var v = (o.value || fill[o.label] || '').replace(/"/g, ''); if (/^none$/i.test(v)) return;
+          var li = el('li'); li.appendChild(el('b', o.label)); li.appendChild(el('span', v)); ol.appendChild(li);
+        });
+        if (ol.children.length) $('tsOrderBox').hidden = false;
+      }
+      var nx = $('tsNext');
+      (data.upcoming || []).slice(0, 3).forEach(function (u) { var li = el('li'); li.appendChild(el('span', md(d(u.date)))); li.appendChild(document.createTextNode(u.name + (u.sermonTitle ? ' — “' + u.sermonTitle + '”' : ''))); nx.appendChild(li); });
+      if (nx.children.length) $('tsNextHead').hidden = false;
+      $('this-sunday').hidden = false;
     }).catch(function () {});
+     }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
   })();
   </script>
 
@@ -662,14 +783,7 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
           <p>Call (260) 744-3228 or email bethfw@yahoo.com with prayer requests, questions or news to share.</p>
         </div>
       </div>
-      <div class="events">
-        <div class="event"><div class="date"><div class="m">Oct</div><div class="d">31</div></div><div><div class="name">Prayer Breakfast</div><div class="when">Saturday · 8:30 am</div></div></div>
-        <div class="event feast"><div class="date"><div class="m">Oct</div><div class="d">31</div></div><div><div class="name">Worship with Communion</div><div class="when">Saturday · 4:00 pm</div></div></div>
-        <div class="event"><div class="date"><div class="m">Nov</div><div class="d">1</div></div><div><div class="name">Worship with Communion</div><div class="when">Sunday · 9:00 am · All Saints'</div></div></div>
-        <div class="event"><div class="date"><div class="m">Nov</div><div class="d">1</div></div><div><div class="name">Education Hour</div><div class="when">Sunday · 10:30 am</div></div></div>
-        <div class="event"><div class="date"><div class="m">Nov</div><div class="d">7</div></div><div><div class="name">Men's Bible Study</div><div class="when">Saturday · 8:30 am</div></div></div>
-        <div class="event"><div class="date"><div class="m">Nov</div><div class="d">10</div></div><div><div class="name">Board of Directors</div><div class="when">Tuesday · 6:30 pm</div></div></div>
-      </div>
+      <div class="events" id="homeEvents"></div>
       <div class="events-foot">
         <a href="#calendar">See the full calendar</a>
         <span style="color:var(--ink-2)">Worship every Saturday at 4:00 and Sunday at 9:00.</span>
@@ -1165,20 +1279,13 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
         <div><span class="k">Every Sunday</span><span>9:00 am Worship with Communion · 10:15 coffee hour · 10:30 am Education Hour</span></div>
         <div><span class="k">Monthly</span><span>Board of Elders and Board of Directors meet on Tuesday evenings at 6:30 pm</span></div>
       </div>
-      <ol class="cal">
-          <li><div class="date"><div class="m">Oct</div><div class="d">31</div></div><div><div class="dow">Sat</div><div class="cal-item"><span class="t">8:30 am</span>Prayer Breakfast</div><div class="cal-item"><span class="t">4:00 pm</span>Worship with Communion · Reformation Day</div></div></li>
-          <li><div class="date"><div class="m">Nov</div><div class="d">1</div></div><div><div class="dow">Sun</div><div class="cal-item"><span class="t">9:00 am</span>Worship with Communion · All Saints'</div><div class="cal-item"><span class="t">10:30 am</span>Education Hour</div></div></li>
-          <li><div class="date"><div class="m">Nov</div><div class="d">7</div></div><div><div class="dow">Sat</div><div class="cal-item"><span class="t">8:30 am</span>Men's Bible Study</div><div class="cal-item"><span class="t">4:00 pm</span>Worship with Communion</div></div></li>
-          <li><div class="date"><div class="m">Nov</div><div class="d">8</div></div><div><div class="dow">Sun</div><div class="cal-item"><span class="t">9:00 am</span>Worship with Communion</div><div class="cal-item"><span class="t">10:30 am</span>Education Hour</div></div></li>
-          <li><div class="date"><div class="m">Nov</div><div class="d">10</div></div><div><div class="dow">Tue</div><div class="cal-item"><span class="t">6:30 pm</span>Board of Directors</div></div></li>
-          <li><div class="date"><div class="m">Nov</div><div class="d">14</div></div><div><div class="dow">Sat</div><div class="cal-item"><span class="t">8:30 am</span>Men's Bible Study</div><div class="cal-item"><span class="t">4:00 pm</span>Worship with Communion</div></div></li>
-          <li><div class="date"><div class="m">Nov</div><div class="d">15</div></div><div><div class="dow">Sun</div><div class="cal-item"><span class="t">9:00 am</span>Worship with Communion</div><div class="cal-item"><span class="t">10:30 am</span>Education Hour</div></div></li>
-      </ol>
+      <ol class="cal" id="calList"></ol>
     </div></section>
 
     <section id="bulletins"><div class="wrap split">
       <div class="section-head"><p class="eyebrow">Sunday bulletins</p><h2>Follow along with the service</h2><p class="lede">Each week's bulletin and announcements, newest first.</p></div>
-      <ul class="doc-list">
+      <div><ul class="doc-list" id="bulletinFeed" hidden></ul>
+      <ul class="doc-list" id="bulletinOld">
           <li><a href="https://www.bethlehemlcms.org/editoruploads/files/BULLETINS/05-17-2026%20The%20Ascension%20of%20Our%20Lord.pdf" target="_blank" rel="noopener"><span class="doc-date">May 17</span><span class="doc-title">The Ascension of Our Lord</span><span class="doc-type">PDF</span></a></li>
           <li><a href="https://www.bethlehemlcms.org/editoruploads/files/BULLETINS/05-10-2026%20Sixth%20Sunday%20of%20Easter(1).pdf" target="_blank" rel="noopener"><span class="doc-date">May 10</span><span class="doc-title">Sixth Sunday of Easter</span><span class="doc-type">PDF</span></a></li>
           <li><a href="https://www.bethlehemlcms.org/editoruploads/files/BULLETINS/5_03_2026%20Fifth%20Sunday%20of%20Easter.pdf" target="_blank" rel="noopener"><span class="doc-date">May 3</span><span class="doc-title">Fifth Sunday of Easter</span><span class="doc-type">PDF</span></a></li>
@@ -1189,7 +1296,7 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
           <li><a href="https://www.bethlehemlcms.org/editoruploads/files/BULLETINS/4-04-26%20Easter%20Vigil.pdf" target="_blank" rel="noopener"><span class="doc-date">Apr 4</span><span class="doc-title">Easter Vigil</span><span class="doc-type">PDF</span></a></li>
           <li><a href="https://www.bethlehemlcms.org/editoruploads/files/BULLETINS/4-02-2026%20Maundy%20Thursday.pdf" target="_blank" rel="noopener"><span class="doc-date">Apr 2</span><span class="doc-title">Maundy Thursday</span><span class="doc-type">PDF</span></a></li>
           <li><a href="https://www.bethlehemlcms.org/editoruploads/files/BULLETINS/3-29-2026%20Palm%20Sunday.pdf" target="_blank" rel="noopener"><span class="doc-date">Mar 29</span><span class="doc-title">Palm Sunday</span><span class="doc-type">PDF</span></a></li>
-      </ul>
+      </ul></div>
     </div></section>
 
     <section id="messenger"><div class="wrap split">
