@@ -101,7 +101,9 @@ nav.main a.give:hover{filter:brightness(1.07);background:var(--sky)}
 .hero .wrap{position:relative;z-index:1;display:block;padding-block:80px 84px}
 .hero-copy{max-width:760px}
 .hero-bg{position:absolute;top:0;right:0;bottom:0;width:60%;pointer-events:none}
-.hero-bg img{display:block;width:100%;height:100%;max-width:none;object-fit:cover;object-position:62% 38%;-webkit-mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.2) 30%,rgba(0,0,0,.85) 62%,#000 80%);mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.2) 30%,rgba(0,0,0,.85) 62%,#000 80%)}
+.hero-bg img,.hero-bg video{display:block;width:100%;height:100%;max-width:none;object-fit:cover;object-position:62% 38%;-webkit-mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.2) 30%,rgba(0,0,0,.85) 62%,#000 80%);mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.2) 30%,rgba(0,0,0,.85) 62%,#000 80%)}
+.hero-bg video{position:absolute;inset:0;object-position:8% 40%}
+@media (prefers-reduced-motion:reduce){.hero-bg video{display:none}}
 .hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,var(--navy) 0%,transparent 22%),linear-gradient(to bottom,var(--navy) 0%,transparent 14%)}
 .hero-copy{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:28px;align-items:start}
 .hero-copy > .eyebrow,.hero-copy > .lede,.hero-copy > .hero-actions{grid-column:1 / -1}
@@ -134,13 +136,13 @@ nav.main a.give:hover{filter:brightness(1.07);background:var(--sky)}
 .window figcaption{font-size:.78rem;color:var(--on-navy-2);text-align:center;padding:12px 0 20px}
 @media (max-width:1000px){
   .hero-bg{width:75%}
-  .hero-bg img{opacity:.75}
+  .hero-bg img,.hero-bg video{opacity:.75}
 }
 @media (max-width:760px){
   .hero{--h1:7.4vw}
   .hero .wrap{padding-block:48px 52px}
   .hero-bg{width:100%}
-  .hero-bg img{opacity:.38;object-position:70% 40%;-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 55%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 55%,transparent 100%)}
+  .hero-bg img,.hero-bg video{opacity:.38;object-position:70% 40%;-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 55%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 55%,transparent 100%)}
   .hero-copy{column-gap:16px}
   .hero-actions{padding-bottom:0}
 }
@@ -473,7 +475,7 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
 <main id="main">
   <div data-view="home">
   <div class="hero" id="top">
-    <div class="hero-bg" aria-hidden="true"><img src="images/background-8992a9ca.jpg" alt=""></div>
+    <div class="hero-bg" aria-hidden="true"><img src="images/hero-poster.jpg" alt=""><video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="images/hero-poster.jpg"><source src="media/hero-1080.webm" type="video/webm"><source src="media/hero-1080.mp4" type="video/mp4"></video></div>
     <div class="wrap">
       <div class="hero-copy">
         <p class="eyebrow">Lutheran Church–Missouri Synod · Anthony Boulevard since 1926</p>
@@ -1471,5 +1473,6 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
 })();
 </script>
 
+<script>/* Hero drone loop: lighter file on phones */(function(){var v=document.getElementById("heroVideo");if(v&&window.matchMedia("(max-width:760px)").matches){v.innerHTML='<source src="media/hero-720.mp4" type="video/mp4">';v.load();}})();</script>
 </body>
 </html>
