@@ -477,7 +477,7 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
 <main id="main">
   <div data-view="home">
   <div class="hero" id="top">
-    <div class="hero-bg" aria-hidden="true"><img src="images/hero-poster.jpg" alt=""><video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="images/hero-poster.jpg"><source src="media/hero-1080.mp4" type="video/mp4"></video></div>
+    <div class="hero-bg" aria-hidden="true"><picture><source media="(max-width:760px)" srcset="images/hero-poster-mobile.jpg"><img src="images/hero-poster.jpg" alt="" fetchpriority="high"></picture><video id="heroVideo" muted loop playsinline preload="none"></video></div><button class="hero-pause" id="heroPause" type="button" aria-label="Pause background video" hidden><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2" width="3.5" height="12" rx="1"/><rect x="9.5" y="2" width="3.5" height="12" rx="1"/></svg></button><script>/* Hero drone montage: right file for the screen, starts right away; stays a still for reduced motion or data saver */(function(){var v=document.getElementById("heroVideo"),b=document.getElementById("heroPause");if(!v)return;var mm=function(q){return window.matchMedia&&matchMedia(q).matches};var c=navigator.connection||{};if(mm("(prefers-reduced-motion: reduce)")||c.saveData||/(^|-)2g$/.test(c.effectiveType||""))return;var phone=mm("(max-width:760px)");v.poster=phone?"images/hero-poster-mobile.jpg":"images/hero-poster.jpg";var file=phone?"media/hero-mobile.mp4":"media/hero-1080.mp4";var P='<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2" width="3.5" height="12" rx="1"/><rect x="9.5" y="2" width="3.5" height="12" rx="1"/></svg>',Y='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11a.8.8 0 0 0 1.2.7l9-5.5a.8.8 0 0 0 0-1.4l-9-5.5A.8.8 0 0 0 4 2.5z"/></svg>';var set=function(){var p=v.paused;b.innerHTML=p?Y:P;b.setAttribute("aria-label",p?"Play background video":"Pause background video")};v.addEventListener("playing",function(){b.hidden=false;set()});v.addEventListener("pause",set);b.addEventListener("click",function(){if(!v.src){v.src=file;}if(v.paused){v.play()}else{v.pause()}});if(phone){b.hidden=false;set();}else{v.src=file;v.preload="auto";var go=v.play();if(go&&go.catch)go.catch(function(){});}})();</script>
     <div class="wrap">
       <div class="hero-copy">
         <p class="eyebrow">Lutheran Church–Missouri Synod · Anthony Boulevard since 1926</p>
@@ -514,6 +514,8 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
       </div>
     </div>
   </div>
+  <div class="seasonal" id="seasonal" data-from="2026-11-15" data-until="2026-12-25" hidden><div class="wrap"><strong>Advent &amp; Christmas at Bethlehem</strong><span>Midweek Advent services at 6:30 pm</span><span>Christmas Eve · Thursday, Dec. 24 at 6:30 pm</span></div></div>
+  <script>(function(){var b=document.getElementById("seasonal");if(!b)return;var t=new Date(),f=new Date(b.dataset.from+"T00:00:00"),u=new Date(b.dataset.until+"T23:59:59");if(t>=f&&t<=u)b.hidden=false;})();</script>
   <div class="next"><div class="wrap"><strong id="nextLabel">Next service</strong><span id="nextText">Saturday at 4:00 pm</span></div></div>
 
   <!-- This Sunday: filled from the worship planner (bethlehem-worship.web.app/public/this-sunday.json). Hidden if it can't load. -->
@@ -553,6 +555,28 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
     .fb-box{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;max-width:500px;width:100%}
     .fb-box iframe{display:block;width:100%;max-width:500px}
     @media (max-width:860px){.follow-grid{grid-template-columns:1fr;gap:28px}}
+  
+/* Review fixes */
+.hero-bg picture{display:block;width:100%;height:100%}
+.communion{border-left:3px solid var(--sky);padding-left:16px}
+.communion p{font-size:.95rem}
+header :focus-visible,.hero :focus-visible,.page-hero :focus-visible,.season-strip :focus-visible{outline-color:var(--sky)}
+.hero-pause{position:absolute;right:18px;bottom:18px;z-index:2;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.45);background:rgba(10,22,52,.55);color:#fff;display:grid;place-items:center;cursor:pointer;padding:0}
+.hero-pause:hover{background:rgba(10,22,52,.8)}
+.hero-pause svg{width:16px;height:16px;fill:currentColor}
+.hero-pause[hidden]{display:none}
+@media (max-width:1000px){.hero-bg img,.hero-bg video{opacity:.55}}
+@media (max-width:760px){
+  .strip-links{display:none}
+  .fb-box{display:none}
+  .hero-bg video,.hero-bg img{opacity:.4}
+  .hero-bg::after{background:linear-gradient(to bottom,rgba(15,31,69,.92) 0%,rgba(15,31,69,.62) 30%,rgba(15,31,69,.42) 60%,rgba(15,31,69,.42) 100%),linear-gradient(to top,var(--navy) 0%,transparent 22%)}
+  .hero-pause{right:12px;bottom:12px}
+}
+.seasonal{background:var(--navy);color:var(--on-navy);font-size:.98rem}
+.seasonal .wrap{padding-block:14px;display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center}
+.seasonal strong{color:var(--sky);font-family:var(--display,inherit)}
+
   </style>
   <script>
   // Filled from the worship planner (bethlehem-worship.web.app/public/this-sunday.json):
@@ -711,7 +735,7 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
       <figure class="wide-photo"><img src="images/bethlehem-s-sanctuary-wooden-pews-26fb35a9.jpg" width="1400" height="777" loading="lazy" alt="Bethlehem's sanctuary: wooden pews and a center aisle leading to the altar beneath a stained-glass window and a carved timber ceiling"><blockquote class="photo-verse"><p>&ldquo;Let us go to the house of the Lord!&rdquo;</p><cite>Psalm 122:1</cite></blockquote></figure>
       <div class="split">
         <ol class="timeline">
-          <li><span class="t">9:00 am · Sanctuary</span><h3>Divine Service</h3><p>Our worship centers on God's gifts in His Word and Sacraments. Jesus meets us with forgiveness, life and salvation, and we respond with prayer, praise and thanksgiving. Expect hymns led by our 1966 pipe organ, Scripture, a sermon and the Lord's Supper, in about an hour.</p></li>
+          <li><span class="t">9:00 am · Sanctuary</span><h3>Divine Service</h3><p>Our worship centers on God's gifts in His Word and Sacraments. Jesus meets us with forgiveness, life and salvation, and we respond with prayer, praise and thanksgiving. Expect hymns led by our 1966 pipe organ, Scripture, a sermon and the Lord's Supper, in about an hour. We love kids in worship, but we also have a nursery that ushers can help you find.</p></li>
           <li><span class="t">10:15 am · Fellowship Hall</span><h3>Coffee hour</h3><p>Stay for coffee and conversation. This is the easiest time to meet Pastor Ben and the congregation.</p></li>
           <li><span class="t">10:30 am · Cafeteria</span><h3>Education hour</h3><p>Adults study the Bible together while children 4 and up go to Sonshine Club.</p></li>
         </ol>
@@ -722,16 +746,17 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
             <p class="addr">3705 S. Anthony Blvd.<br>Fort Wayne, IN 46806</p>
             <div class="row">
               <a class="link-btn" href="https://www.google.com/maps/search/?api=1&amp;query=3705+S+Anthony+Blvd+Fort+Wayne+IN+46806" target="_blank" rel="noopener">Get directions</a>
-              <button class="link-btn copy" data-copy="(260) 744-3228" type="button">Call (260) 744-3228</button>
-              <button class="link-btn copy" data-copy="bethfw@yahoo.com" type="button">Email bethfw@yahoo.com</button>
+              <a class="link-btn" href="tel:+12607443228">Call (260) 744-3228</a>
+              <a class="link-btn" href="mailto:bethfw@yahoo.com">Email bethfw@yahoo.com</a>
             </div>
             <div class="contact-list">
               <span><b>Office hours</b> · Monday–Friday, 9:00 am–1:00 pm</span>
               <span><b>Fax</b> · (260) 744-3229</span>
             </div>
           </div>
-          <div><h3>Can't make it in person?</h3><p>Every Sunday at 9:00 am the service streams on our <a href="https://www.facebook.com/bethlehemfortwayne" target="_blank" rel="noopener">Facebook page</a>. Follow along with the bulletin from the members page.</p></div>
-          <div><h3>Questions about what we believe?</h3><p>Read <a href="#beliefs">what we believe</a>, then let Pastor Ben talk it through with you over coffee. Email him at pastorben@bethlehemlcms.com or call the church office to set up a time.</p></div>
+          <div class="communion"><h3>Communion at Bethlehem</h3><p>At Bethlehem, we believe that in Holy Communion Jesus truly comes to us with His body and blood, given in, with, and under the bread and wine for the forgiveness of sins and the strengthening of faith. This meal is one of God&rsquo;s gifts to His people, bringing us Christ&rsquo;s grace and drawing us together in unity.</p><p>As the Small Catechism teaches, those who receive this gift are called to examine themselves: recognizing their sin, trusting in Jesus for forgiveness, believing that Christ is truly present in this meal, and desiring to live in faith and love.</p><p>Because we believe Communion expresses a shared confession of faith, Bethlehem practices communion in fellowship with the teachings of the Lutheran Church&mdash;Missouri Synod. If you are not communing today or would like to learn more, you are warmly invited to come forward for a blessing by crossing your arms over your chest, or speak with our pastor after the service.</p></div>
+          <div><h3>Can't make it in person?</h3><p>Every Sunday at 9:00 am the service streams on our <a href="https://www.facebook.com/bethlehemfortwayne" target="_blank" rel="noopener">Facebook page</a>. Follow along with this week&rsquo;s bulletin on our <a href="#news">News page</a>.</p></div>
+          <div><h3>Questions about what we believe?</h3><p>Read <a href="#beliefs">what we believe</a>, then let Pastor Ben talk it through with you over coffee. Email him at <a href="mailto:pastorben@bethlehemlcms.com">pastorben@bethlehemlcms.com</a> or call the church office to set up a time.</p></div>
         </div>
       </div>
     </div>
@@ -781,7 +806,7 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
         <div class="notice">
           <span class="eyebrow">Church office</span>
           <h3>Open weekdays 9–1</h3>
-          <p>Call (260) 744-3228 or email bethfw@yahoo.com with prayer requests, questions or news to share.</p>
+          <p>Call <a href="tel:+12607443228">(260) 744-3228</a> or email <a href="mailto:bethfw@yahoo.com">bethfw@yahoo.com</a> with prayer requests, questions or news to share.</p>
         </div>
       </div>
       <div class="events" id="homeEvents"></div>
@@ -855,7 +880,7 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
           <blockquote>"If you have questions about the church, what we believe, or how it fits in a changing world, reach out. I'd love to grab a drink and talk it over."</blockquote>
           <p class="sig"><b>Rev. Ben Ahlersmeyer</b> · Pastor at Bethlehem since 2020</p>
           <p class="lede" style="margin-top:16px">Pastor Ben and his wife, Melissa, have two boys. You'll often find the family at the zoo or Promenade Park.</p>
-          <div class="row" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:22px"><button class="link-btn copy" data-copy="pastorben@bethlehemlcms.com" type="button">Email Pastor Ben</button><span style="align-self:center;color:var(--ink-2);font-size:.95rem">pastorben@bethlehemlcms.com</span></div>
+          <div class="row" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:22px"><a class="link-btn" href="mailto:pastorben@bethlehemlcms.com">Email Pastor Ben</a><span style="align-self:center;color:var(--ink-2);font-size:.95rem">pastorben@bethlehemlcms.com</span></div>
         </div>
       </div>
       <div class="staff">
@@ -1008,13 +1033,13 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
       <p class="eyebrow">Our story · 1926–2026</p>
       <h1>Throughout all generations</h1>
       <p class="lede">“Lord, You have been our dwelling place throughout all generations.” Psalm 90:1. The story of Bethlehem Lutheran Church and School, compiled and edited by Donna Volmerding for our centennial.</p>
-      <nav class="jump" aria-label="Chapters"><a href="#ch-1">Ch. 1 · The seed of faith (1925-26)</a><a href="#ch-2">Ch. 2 · A congregation is born (1926-29)</a><a href="#ch-3">Ch. 3 · Building the foundation (1926-40)</a><a href="#ch-4">Ch. 4 · Growth and service (1940-60)</a><a href="#ch-5">Ch. 5 · Worship and witness (1960-80)</a><a href="#ch-6">Ch. 6 · Challenges and transitions (1980-2010)</a><a href="#ch-7">Ch. 7 · Renewed mission and vision (2010-26)</a><a href="#ch-8">Ch. 8 · Lessons from a century</a><a href="#ch-9">Ch. 9 · Throughout all generations</a><a href="#ch-10">Ch. 10 · Looking forward</a><a href="#ch-hopes">Goals and hopes for the future</a><a href="#clergy">Our pastors</a></nav>
+      <nav class="jump" aria-label="Chapters"><a href="#ch-1">Ch. 1 · The seed of faith (1925-26)</a><a href="#ch-2">Ch. 2 · A congregation is born (1926-29)</a><a href="#ch-3">Ch. 3 · Building the foundation (1926-40)</a><a href="#ch-4">Ch. 4 · Growth and service (1940-60)</a><a href="#ch-5">Ch. 5 · Worship and witness (1960-80)</a><a href="#ch-6">Ch. 6 · Challenges and transitions (1980-2010)</a><a href="#ch-7">Ch. 7 · Renewed mission and vision (2010-26)</a><a href="#ch-8">Ch. 8 · Lessons from a century</a><a href="#ch-9">Ch. 9 · Throughout all generations</a><a href="#ch-10">Ch. 10 · Looking forward</a><a href="#ch-hopes">The next 100 years</a><a href="#clergy">Our pastors</a></nav>
     </div></div>
     <div class="wrap story">
       <div class="story-intro"><p>The theme for Bethlehem Lutheran Church’s centennial celebration is “Lord, You have been our dwelling place throughout all generations” (Psalm 90:1).</p>
 <p>The mission of Bethlehem Lutheran Church is “Proclaiming Christ. Nurturing Faith. Restoring Hope.”</p>
 <p>Bethlehem is a place where Christ is born anew in the hearts of all who enter, and a house of bread — that is the meaning of Bethlehem — where souls are nourished with the word of God.</p>
-<p class="story-verse">“Now to Him Who is able to do immeasurably more that all we ask or imagine, according to His power that is at work within us, to Him be glory in the church and in Christ Jesus throughout all generations, for ever and ever! Amen.” Ephesians 3:20-21</p>
+<p class="story-verse">“Now to Him Who is able to do immeasurably more than all we ask or imagine, according to His power that is at work within us, to Him be glory in the church and in Christ Jesus throughout all generations, for ever and ever! Amen.” Ephesians 3:20-21</p>
 </div>
       <section class="story-ch" id="ch-1"><p class="eyebrow">Chapter One</p><h2>The seed of faith (1925-26)</h2>
 <p>The story of Bethlehem Lutheran Church, 3705 S. Anthony Blvd. in Fort Wayne, Indiana, begins not with grand plans or ambitious visions, but with the simple needs of faithful families seeking to nurture their children in God’s word.</p>
@@ -1168,26 +1193,10 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
 <p>As the congregation celebrates one hundred years of faithful ministry, it does so with the confidence that the best chapters of its story are yet to be written. The God Who has been faithful for the past century will continue to be faithful for the century to come. The gospel that has sustained and motivated Bethlehem through its first hundred years will continue to transform lives and communities for generations yet to come.</p>
 <p>To God be the glory, great things He has done. To God be the glory for the century past, and to God be the glory for the century to come.</p>
 </section>
-<section class="story-ch" id="ch-hopes"><p class="eyebrow">Looking ahead</p><h2>Goals and hopes for the future</h2>
-<p>Bethlehem Lutheran Church sits in the middle of several challenges; the zip codes surrounding the church constitute Indiana’s poorest area. In 2018, the St. Joseph Community Health Foundation published an Allen County Vulnerable Populations study. The data showed that about 30 percent of those in the six zip codes of Fort Wayne’s southeast side lived below the poverty level.</p>
-<p>The Allen County unemployment rate at the time was about 7 percent, but the 46816, 46803, 46802 and 46806 zip codes were all over 11 percent. Nearly half of the 46806 households with at least one child under the age of six were single-mother households.</p>
-<p>Despite increased attention by local government officials, the 2023 American Community Survey statistics showed the trends are getting worse. According to the most recent census information, the 46803 zip code, located directly to Bethlehem’s north, is the poorest in the state with 50.9 percent of the population living below the poverty level. Bethlehem’s 46806 zip code has 38 percent of people living below the poverty level, with the nearby 46802 zip code measuring 37.6 percent of those living below the poverty line.</p>
-<p>The five zip codes surrounding Bethlehem have a population of 81,851, and the employment rate is 57.2 percent. The percentage with a bachelor’s degree or higher in education is 14.4 percent, and 49.3 percent own their own home. There are 21.2 percent who speak a language other than English and 13.4 percent who were born internationally.</p>
-<p>In the 46806 zip code, 24.4 percent of households earn $25,000 or less annually, 16.6 percent lack healthcare coverage and 23 percent receive public assistance or SNAP. Approximately 29 percent speak a language other than English and 19.4 percent are foreign-born.</p>
-<p>Although the challenges are many, the advantages are that Bethlehem provides a community food bank that has served hundreds of families each year since 1980. The church formerly hosted a free clinic for about 10 years — Living Luke’s Legacy. The neighborhood is aware that the church is a place to find help; now the church looks for ways to provide hope.</p>
-<p>Besides the recently renovated food bank, the facility has approximately 62,000 square feet of available space, including a gymnasium and stage, locker rooms with working showers, a cafeteria and working kitchen, designated music rooms, a library, a computer room and 13 classrooms. There are also 10 bathrooms that work but need to be updated.</p>
-<p>Across Euclid Avenue is another parking lot and an acre-and-a-half of green grass that served as athletic fields for decades. City planners have visited and discussed the possibility of building low-income housing on the site.</p>
-<p>Former elementary school classrooms are clean but need some definitive upgrades. Bethlehem is not ADA-compliant (the American Disability Act), it lacks an elevator, and everyone must climb or descend 10 or more stairs immediately after entering to reach a main floor. The building still uses a boiler system implemented in the 1970s for heat.</p>
-<p>Many positives are that Bethlehem has no debt, a healthy endowment and a membership with experience in various fields. The committee has had great success utilizing members’ advice in fields such as engineering, HVAC units, etc.</p>
-<p>Bethlehem has big dreams and plans, and desires to turn Bethlehem’s former school building into a community center that houses after-school options, adult-education classes and youth-oriented programs, as well as offering other social services.</p>
-<p>Suggestions are a clinic for medical and mental-health counseling, a clothing bank and/or cooking classes offered in the kitchen. Youth basketball might return to the gymnasium, or the stage could be utilized again for plays.</p>
-<p>Bethlehem is working with engineers and local nonprofits to talk about what might be necessary and what might be possible.</p>
-<p>In addition to updating the facility to modernize the plumbing, electrical system and security, an addition will be required to allow first-floor access and overall accessibility. Installing at least one elevator, likely two, is a must to achieve ADA compliance.</p>
-<p>Fulfilling these hopes and plans will require a major capital campaign that reaches out to current and past church members and the neighborhood, requires continual applications for grants, and hiring for outreach positions and a social-media coordinator.</p>
-<p>To learn more, gather new ideas and be open to opportunities, committee members have met with more than 25 representatives of local government and nonprofit organizations. One of those organizations, Changing Footprints, needed a new facility after losing its lease and moved in almost immediately to continue its mission of gathering shoes to give to children across the state and the world.</p>
-<p>Bethlehem needs someone who will serve as the face of whatever plans are implemented. Several committee members believe that the church needs a young, vibrant and motivated community outreach director on staff; a committee member has talked with a social-media director about reaching out to the community in an effective way.</p>
-<p>Visitors have expressed excitement about the possibilities; they understand that Bethlehem’s location and facilities are ready for new life, new ideas and new purpose. They see the new hope Bethlehem can inspire. As one city official said during a tour, “Do you know what it would cost to build something new with 62,000 square feet?”</p>
-<p>Bethlehem began as a neighborhood church and aims to keep serving its members and local community. Everyone’s help is needed to fulfill these goals and ideas.</p>
+<section class="story-ch" id="ch-hopes"><p class="eyebrow">Looking ahead</p><h2>The next 100 years</h2>
+<p>For a century, God has gathered His people on Anthony Boulevard around His Word and Sacraments. Bethlehem began as a neighborhood church, and by His grace it still is one. Our food bank has served hundreds of families every year since 1980, and the neighborhood knows Bethlehem as a place to find help.</p>
+<p>As we begin our second century, our calling has not changed: proclaiming Christ, nurturing faith and restoring hope on Fort Wayne&rsquo;s southeast side. Our building has room to grow, with a gym, a kitchen, classrooms and more, and we pray that God will fill it with new life, new neighbors and new ways to serve.</p>
+<p>&ldquo;Lord, You have been our dwelling place throughout all generations&rdquo; (Psalm 90:1). The One who has been faithful for 100 years will be faithful still. <a href="#visit">Come and be part of the next chapter.</a></p>
 </section>
       <section class="story-ch" id="clergy"><p class="eyebrow">1926–2026</p><h2>Clergy who have served Bethlehem</h2><ol class="clergy"><li><span class="cy">1926</span><span>The Rev. H.D. Mensing</span></li><li><span class="cy">1926–31</span><span>The Rev. M.E. Reinke</span></li><li><span class="cy">1931–65</span><span>The Rev. Arno C. Scholz</span></li><li><span class="cy">1949–70</span><span>The Rev. Henry Blanke</span></li><li><span class="cy">1956–58</span><span>The Rev. Herbert Mueller</span></li><li><span class="cy">1958–66</span><span>The Rev. Robert Meier</span></li><li><span class="cy">1966–69</span><span>The Rev. B. Dale Thomas</span></li><li><span class="cy">1967–77</span><span>The Rev. Richard Widmann</span></li><li><span class="cy">1970–76</span><span>The Rev. Walter Barth</span></li><li><span class="cy">1972–88</span><span>The Rev. Jeffrey A. Olsen</span></li><li><span class="cy">1977–92</span><span>The Rev. David Schlie</span></li><li><span class="cy">1987</span><span>The Rev. Gary Williams</span></li><li><span class="cy">1990–91</span><span>The Rev. Andrew Northrop</span></li><li><span class="cy">1993–98</span><span>The Rev. S T Williams</span></li><li><span class="cy">1993–2006</span><span>The Rev. Thomas Eggold</span></li><li><span class="cy">2000–03</span><span>The Rev. Gregory Manning</span></li><li><span class="cy">2005–14</span><span>The Rev. Steve Ensley</span></li><li><span class="cy">2007–20</span><span>The Rev. Jeffrey Geisler</span></li><li><span class="cy">2020–present</span><span>The Rev. Ben Ahlersmeyer</span></li></ol></section>
       <p class="story-back"><a class="link-btn" href="#history">&larr; Back to the timeline</a></p>
@@ -1214,7 +1223,7 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
       <div><p class="eyebrow">Connect</p><h2>Christ Care small groups</h2></div>
       <div class="ministry-body">
         <p>Small groups give you a place to pray, study Scripture and share life with a few other members during the week.</p>
-        <p class="ask">To find a group that fits your schedule, call the church office at (260) 744-3228 or email bethfw@yahoo.com.</p>
+        <p class="ask">To find a group that fits your schedule, call the church office at <a href="tel:+12607443228">(260) 744-3228</a> or email <a href="mailto:bethfw@yahoo.com">bethfw@yahoo.com</a>.</p>
       </div>
     </div></section>
 
@@ -1336,7 +1345,7 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
       <div><p class="eyebrow">For members</p><h2>Serving schedules</h2></div>
       <div class="ministry-body">
         <p>Thank you for serving! Schedules are kept for acolytes, altar guild, elders, head ushers, readers, PowerPoint and sound operators, and prayer leaders.</p>
-        <p class="ask">For your current schedule, or to trade a date, contact the church office at (260) 744-3228 or bethfw@yahoo.com.</p>
+        <p class="ask">For your current schedule, or to trade a date, contact the church office at <a href="tel:+12607443228">(260) 744-3228</a> or <a href="mailto:bethfw@yahoo.com">bethfw@yahoo.com</a>.</p>
       </div>
     </div></section>
   </div>
@@ -1352,7 +1361,7 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
 <rect opacity=".35" x="133.2" y="151.6" width="526.1" height="2" fill="currentColor"/>
 <path transform="translate(251.9,187.6)" d="M2.379 0.0 2.392 -18.798H5.213V-2.444H13.897V0.0Z M26.519999999999996 0.26Q23.997999999999998 0.26 22.444499999999998 -0.572Q20.891 -1.404 20.182499999999997 -3.0029999999999997Q19.474 -4.601999999999999 19.474 -6.903V-18.798H22.346999999999998V-6.552Q22.346999999999998 -4.316 23.445499999999996 -3.2305Q24.543999999999997 -2.145 26.519999999999996 -2.145Q27.833 -2.145 28.7885 -2.6195Q29.744 -3.094 30.250999999999998 -4.0755Q30.758 -5.0569999999999995 30.758 -6.552V-18.798H33.57899999999999V-6.6819999999999995Q33.57899999999999 -4.484999999999999 32.851 -2.9314999999999998Q32.123 -1.378 30.569499999999998 -0.5589999999999999Q29.016 0.26 26.519999999999996 0.26Z M44.083 0.0V-16.262999999999998H38.129V-18.798H52.571999999999996V-16.262999999999998H46.89099999999999V0.0Z M57.60299999999999 0.0V-18.798H60.38499999999999V-10.92H70.005V-18.798H72.78699999999999V0.0H70.005V-8.501999999999999H60.38499999999999V0.0Z M79.625 0.0V-18.798H91.767L91.75399999999999 -16.38H82.41999999999999V-10.673H90.753V-8.294H82.407V-2.457L91.988 -2.444V0.0Z M97.942 0.0V-18.798H105.40399999999998Q107.49699999999999 -18.798 108.87499999999999 -18.1545Q110.25299999999999 -17.511 110.92899999999999 -16.328Q111.60499999999999 -15.145 111.60499999999999 -13.533Q111.60499999999999 -12.011999999999999 111.0915 -10.998Q110.57799999999999 -9.984 109.76549999999999 -9.347Q108.95299999999999 -8.709999999999999 108.05599999999998 -8.346L111.69599999999998 0.0H108.77099999999999L105.44299999999998 -7.864999999999999H100.72399999999999V0.0ZM100.72399999999999 -10.113999999999999H104.64999999999999Q106.61299999999999 -10.113999999999999 107.69199999999998 -10.965499999999999Q108.77099999999999 -11.817 108.77099999999999 -13.402999999999999Q108.77099999999999 -14.963 107.78949999999999 -15.768999999999998Q106.80799999999999 -16.575 105.13099999999999 -16.575H100.72399999999999Z M116.33699999999997 0.0 123.12299999999998 -18.798H126.19099999999997L132.96399999999997 0.0H130.15599999999998L128.38799999999998 -4.927H120.93899999999998L119.15799999999999 0.0ZM121.62799999999999 -7.449H127.65999999999998L124.64399999999998 -16.093999999999998Z M138.39799999999997 0.0V-18.798H141.08899999999997L150.65699999999998 -4.784V-18.798H153.45199999999997V0.0H150.956L141.17999999999998 -14.312999999999999V0.0Z M175.656 0.26Q173.108 0.26 171.288 -0.9165Q169.468 -2.093 168.4995 -4.2705Q167.531 -6.4479999999999995 167.531 -9.49Q167.531 -12.519 168.493 -14.657499999999999Q169.45499999999998 -16.796 171.27499999999998 -17.927Q173.095 -19.058 175.656 -19.058Q177.684 -19.058 179.257 -18.226Q180.82999999999998 -17.394 181.78549999999998 -15.989999999999998Q182.74099999999999 -14.585999999999999 182.923 -12.883H179.959Q179.764 -13.949 179.2115 -14.8135Q178.659 -15.677999999999999 177.749 -16.1785Q176.839 -16.679 175.591 -16.679Q173.992 -16.679 172.874 -15.924999999999999Q171.756 -15.171 171.1775 -13.572Q170.599 -11.972999999999999 170.599 -9.450999999999999Q170.599 -5.6419999999999995 171.886 -3.8804999999999996Q173.173 -2.1189999999999998 175.591 -2.1189999999999998Q176.839 -2.1189999999999998 177.749 -2.6585Q178.659 -3.198 179.2115 -4.1015Q179.764 -5.005 179.959 -6.071H182.923Q182.767 -4.835999999999999 182.273 -3.6984999999999997Q181.779 -2.561 180.9015 -1.664Q180.024 -0.767 178.724 -0.2535Q177.424 0.26 175.656 0.26Z M188.734 0.0V-18.798H191.51600000000002V-10.92H201.13600000000002V-18.798H203.918V0.0H201.13600000000002V-8.501999999999999H191.51600000000002V0.0Z M217.80200000000005 0.26Q215.28000000000003 0.26 213.72650000000004 -0.572Q212.17300000000003 -1.404 211.46450000000004 -3.0029999999999997Q210.75600000000003 -4.601999999999999 210.75600000000003 -6.903V-18.798H213.62900000000005V-6.552Q213.62900000000005 -4.316 214.72750000000005 -3.2305Q215.82600000000005 -2.145 217.80200000000005 -2.145Q219.11500000000004 -2.145 220.07050000000004 -2.6195Q221.02600000000004 -3.094 221.53300000000004 -4.0755Q222.04000000000005 -5.0569999999999995 222.04000000000005 -6.552V-18.798H224.86100000000005V-6.6819999999999995Q224.86100000000005 -4.484999999999999 224.13300000000004 -2.9314999999999998Q223.40500000000003 -1.378 221.85150000000004 -0.5589999999999999Q220.29800000000003 0.26 217.80200000000005 0.26Z M231.21800000000005 0.0V-18.798H238.68000000000006Q240.77300000000005 -18.798 242.15100000000007 -18.1545Q243.52900000000005 -17.511 244.20500000000004 -16.328Q244.88100000000006 -15.145 244.88100000000006 -13.533Q244.88100000000006 -12.011999999999999 244.36750000000006 -10.998Q243.85400000000004 -9.984 243.04150000000004 -9.347Q242.22900000000004 -8.709999999999999 241.33200000000005 -8.346L244.97200000000007 0.0H242.04700000000005L238.71900000000005 -7.864999999999999H234.00000000000006V0.0ZM234.00000000000006 -10.113999999999999H237.92600000000004Q239.88900000000007 -10.113999999999999 240.96800000000007 -10.965499999999999Q242.04700000000005 -11.817 242.04700000000005 -13.402999999999999Q242.04700000000005 -14.963 241.06550000000004 -15.768999999999998Q240.08400000000006 -16.575 238.40700000000007 -16.575H234.00000000000006Z M258.12800000000004 0.26Q255.58000000000007 0.26 253.76000000000005 -0.9165Q251.94000000000005 -2.093 250.97150000000005 -4.2705Q250.00300000000007 -6.4479999999999995 250.00300000000007 -9.49Q250.00300000000007 -12.519 250.96500000000006 -14.657499999999999Q251.92700000000005 -16.796 253.74700000000007 -17.927Q255.56700000000006 -19.058 258.12800000000004 -19.058Q260.15600000000006 -19.058 261.72900000000004 -18.226Q263.3020000000001 -17.394 264.25750000000005 -15.989999999999998Q265.2130000000001 -14.585999999999999 265.39500000000004 -12.883H262.43100000000004Q262.23600000000005 -13.949 261.6835000000001 -14.8135Q261.1310000000001 -15.677999999999999 260.22100000000006 -16.1785Q259.31100000000004 -16.679 258.06300000000005 -16.679Q256.46400000000006 -16.679 255.34600000000006 -15.924999999999999Q254.22800000000007 -15.171 253.64950000000005 -13.572Q253.07100000000005 -11.972999999999999 253.07100000000005 -9.450999999999999Q253.07100000000005 -5.6419999999999995 254.35800000000006 -3.8804999999999996Q255.64500000000007 -2.1189999999999998 258.06300000000005 -2.1189999999999998Q259.31100000000004 -2.1189999999999998 260.22100000000006 -2.6585Q261.1310000000001 -3.198 261.6835000000001 -4.1015Q262.23600000000005 -5.005 262.43100000000004 -6.071H265.39500000000004Q265.23900000000003 -4.835999999999999 264.74500000000006 -3.6984999999999997Q264.2510000000001 -2.561 263.37350000000004 -1.664Q262.49600000000004 -0.767 261.196 -0.2535Q259.8960000000001 0.26 258.12800000000004 0.26Z M271.2060000000001 0.0V-18.798H273.98800000000006V-10.92H283.60800000000006V-18.798H286.39000000000004V0.0H283.60800000000006V-8.501999999999999H273.98800000000006V0.0Z" fill="currentColor"/>
 </svg></a>
-      <p style="margin-top:12px;color:var(--ink-2)">3705 S. Anthony Blvd.<br>Fort Wayne, IN 46806<br>(260) 744-3228 · bethfw@yahoo.com<br>Pastor Ben · pastorben@bethlehemlcms.com<br>Office open Mon–Fri, 9 am–1 pm</p>
+      <p style="margin-top:12px;color:var(--ink-2)">3705 S. Anthony Blvd.<br>Fort Wayne, IN 46806<br><a href="tel:+12607443228">(260) 744-3228</a> · <a href="mailto:bethfw@yahoo.com">bethfw@yahoo.com</a><br>Pastor Ben · <a href="mailto:pastorben@bethlehemlcms.com">pastorben@bethlehemlcms.com</a><br>Office open Mon–Fri, 9 am–1 pm</p>
     </div>
     <div><h4>Worship</h4><ul><li>Saturday 4:00 pm</li><li>Sunday 9:00 am</li><li>Education hour 10:30 am</li></ul></div>
     <div><h4>Explore</h4><ul><li><a href="#visit">Plan a visit</a></li><li><a href="#food-bank">Food bank</a></li><li><a href="#mission">Mission &amp; values</a></li><li><a href="#history">Our history</a></li><li><a href="#our-story">Full centennial history</a></li><li><a href="#beliefs">What we believe</a></li></ul></div>
@@ -1453,7 +1462,7 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
   else if(+today===+pent){ season='The Day of Pentecost'; color='#b33a2e'; }
   else { season='The Season after Pentecost'; color='#2e6a52'; }
   var ref=d(y,9,31), dRef=(ref-today)/864e5;
-  var extra = (dRef>=0 && dRef<=6) ? (dRef===0?' · Today is Reformation Day':' · Reformation Day this Saturday') : '';
+  var extra = (dRef>=0 && dRef<=6) ? (dRef===0?' · Today is Reformation Day':' · Reformation Day this '+['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][ref.getDay()]) : '';
   if(dRef>=0 && dRef<=6){ /* keep season color but note the feast */ }
   document.documentElement.style.setProperty('--season', color);
   document.getElementById('seasonText').textContent = season + extra;
@@ -1475,6 +1484,5 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
 })();
 </script>
 
-<script>/* Hero drone montage: vertical cut on phones */(function(){var v=document.getElementById("heroVideo");if(v&&window.matchMedia("(max-width:760px)").matches){v.poster="images/hero-poster-mobile.jpg";v.innerHTML='<source src="media/hero-mobile.mp4" type="video/mp4">';v.load();}})();</script>
 </body>
 </html>
