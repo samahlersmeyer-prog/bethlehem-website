@@ -143,6 +143,7 @@ nav.main a.give:hover{filter:brightness(1.07);background:var(--sky)}
   .hero .wrap{padding-block:48px 52px}
   .hero-bg{width:100%}
   .hero-bg img,.hero-bg video{opacity:.38;object-position:70% 40%;-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 55%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 55%,transparent 100%)}
+  .hero-bg video{object-position:50% 40%;opacity:.5}
   .hero-copy{column-gap:16px}
   .hero-actions{padding-bottom:0}
 }
@@ -263,6 +264,7 @@ section + .aerial, .aerial + section{border-top:0}
 .page-hero{background:var(--navy);color:var(--on-navy)}
 .page-hero.has-photo{background:linear-gradient(90deg,rgba(10,22,52,.94) 0%,rgba(10,22,52,.82) 45%,rgba(10,22,52,.45) 100%),var(--photo) center/cover no-repeat}
 .page-hero.has-photo .wrap{padding-block:88px 56px}
+.page-hero.has-photo.story-photo{background-position:0 0,70% 42%}
 @media (max-width:700px){.page-hero.has-photo{background:linear-gradient(rgba(10,22,52,.86),rgba(10,22,52,.86)),var(--photo) center/cover no-repeat}}
 .page-hero .wrap{padding-block:56px 44px;display:grid;gap:14px}
 .page-hero .eyebrow{color:var(--sky)}
@@ -475,7 +477,7 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
 <main id="main">
   <div data-view="home">
   <div class="hero" id="top">
-    <div class="hero-bg" aria-hidden="true"><img src="images/hero-poster.jpg" alt=""><video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="images/hero-poster.jpg"><source src="media/hero-1080.webm" type="video/webm"><source src="media/hero-1080.mp4" type="video/mp4"></video></div>
+    <div class="hero-bg" aria-hidden="true"><img src="images/hero-poster.jpg" alt=""><video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="images/hero-poster.jpg"><source src="media/hero-1080.mp4" type="video/mp4"></video></div>
     <div class="wrap">
       <div class="hero-copy">
         <p class="eyebrow">Lutheran Church–Missouri Synod · Anthony Boulevard since 1926</p>
@@ -1002,7 +1004,7 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
 
 
   <div data-view="our-story" hidden>
-    <div class="page-hero"><div class="wrap">
+    <div class="page-hero has-photo story-photo" style="--photo:url(images/background-8992a9ca.jpg)"><div class="wrap">
       <p class="eyebrow">Our story · 1926–2026</p>
       <h1>Throughout all generations</h1>
       <p class="lede">“Lord, You have been our dwelling place throughout all generations.” Psalm 90:1. The story of Bethlehem Lutheran Church and School, compiled and edited by Donna Volmerding for our centennial.</p>
@@ -1473,6 +1475,6 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
 })();
 </script>
 
-<script>/* Hero drone loop: lighter file on phones */(function(){var v=document.getElementById("heroVideo");if(v&&window.matchMedia("(max-width:760px)").matches){v.innerHTML='<source src="media/hero-720.mp4" type="video/mp4">';v.load();}})();</script>
+<script>/* Hero drone montage: vertical cut on phones */(function(){var v=document.getElementById("heroVideo");if(v&&window.matchMedia("(max-width:760px)").matches){v.poster="images/hero-poster-mobile.jpg";v.innerHTML='<source src="media/hero-mobile.mp4" type="video/mp4">';v.load();}})();</script>
 </body>
 </html>
