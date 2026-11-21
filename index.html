@@ -12,8 +12,14 @@
 <meta property="og:site_name" content="Bethlehem Lutheran Church">
 <meta property="og:title" content="Bethlehem Lutheran Church · Fort Wayne">
 <meta property="og:description" content="Proclaiming Christ. Nurturing Faith. Restoring Hope. Worship Saturday 4:00 pm and Sunday 9:00 am on Anthony Boulevard.">
-<meta property="og:image" content="images/background-8992a9ca.jpg">
+<meta property="og:url" content="https://www.blcfw.org/">
+<link rel="canonical" href="https://www.blcfw.org/">
+<meta property="og:image" content="https://www.blcfw.org/images/share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Bethlehem Lutheran Church tower and cross at golden hour, Fort Wayne">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.blcfw.org/images/share.jpg">
 <meta name="description" content="Bethlehem Lutheran Church (LCMS) on Anthony Boulevard in southeast Fort Wayne. Worship Saturday 4:00 pm and Sunday 9:00 am. Food bank open Tuesday through Thursday.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -514,7 +520,7 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
       </div>
     </div>
   </div>
-  <div class="seasonal" id="seasonal" data-from="2026-11-15" data-until="2026-12-25" hidden><div class="wrap"><strong>Advent &amp; Christmas at Bethlehem</strong><span>Midweek Advent services at 6:30 pm</span><span>Christmas Eve · Thursday, Dec. 24 at 6:30 pm</span></div></div>
+  <div class="seasonal" id="seasonal" data-from="2026-11-15" data-until="2026-12-24" hidden><div class="wrap"><strong>Advent &amp; Christmas at Bethlehem</strong><span>Midweek Advent services at 6:30 pm</span><span>Christmas Eve · Thursday, Dec. 24 at 6:30 pm</span></div></div>
   <script>(function(){var b=document.getElementById("seasonal");if(!b)return;var t=new Date(),f=new Date(b.dataset.from+"T00:00:00"),u=new Date(b.dataset.until+"T23:59:59");if(t>=f&&t<=u)b.hidden=false;})();</script>
   <div class="next"><div class="wrap"><strong id="nextLabel">Next service</strong><span id="nextText">Saturday at 4:00 pm</span></div></div>
 
@@ -749,7 +755,7 @@ header :focus-visible,.hero :focus-visible,.page-hero :focus-visible,.season-str
             <p class="addr">3705 S. Anthony Blvd.<br>Fort Wayne, IN 46806</p>
             <div class="row">
               <a class="link-btn" href="https://www.google.com/maps/search/?api=1&amp;query=3705+S+Anthony+Blvd+Fort+Wayne+IN+46806" target="_blank" rel="noopener">Get directions</a>
-              <a class="link-btn" href="tel:+12607443228">Call (260) 744-3228</a>
+              <a class="link-btn" href="tel:+12607443228">Call <a href="tel:+12607443228">(260) 744-3228</a></a>
               <a class="link-btn" href="mailto:bethfw@yahoo.com">Email bethfw@yahoo.com</a>
             </div>
             <div class="contact-list">
@@ -864,7 +870,7 @@ header :focus-visible,.hero :focus-visible,.page-hero :focus-visible,.season-str
           <text x="72" y="92" font-size="11" font-family="Public Sans, sans-serif" fill="var(--ink)">Bethlehem</text>
           <text x="160" y="116" text-anchor="middle" font-size="13" font-family="Public Sans, sans-serif" font-weight="600" fill="var(--season)">about 16 sq mi</text>
         </svg>
-        <p>If you live in this part of southeast Fort Wayne, come during open hours. Not sure if you're in the area? Call the office at (260) 744-3228.</p>
+        <p>If you live in this part of southeast Fort Wayne, come during open hours. Not sure if you're in the area? Call the office at <a href="tel:+12607443228">(260) 744-3228</a>.</p>
         <ul class="help-list">
           <li>Donate non-perishable food at any service</li>
           <li>Volunteer on a weekday morning</li>
@@ -1251,7 +1257,7 @@ header :focus-visible,.hero :focus-visible,.page-hero :focus-visible,.season-str
       <div><p class="eyebrow">Worship</p><h2>Choir &amp; handbells</h2></div>
       <div class="ministry-body">
         <p>Our choir and handbell choir lead the congregation in song and help us praise God in worship, alongside our 1966 pipe organ.</p>
-        <p class="ask">Interested in singing or ringing? Call the church office at (260) 744-3228 to find out when rehearsals meet.</p>
+        <p class="ask">Interested in singing or ringing? Call the church office at <a href="tel:+12607443228">(260) 744-3228</a> to find out when rehearsals meet.</p>
       </div>
     </div></section>
 
@@ -1265,7 +1271,7 @@ header :focus-visible,.hero :focus-visible,.page-hero :focus-visible,.season-str
           <li>Men are matched with men, and women with women.</li>
           <li>Stephen Ministers meet with their leaders twice a month for supervision and continuing education.</li>
         </ul>
-        <p class="ask">To ask about receiving care, or to become a Stephen Minister, call the church office at (260) 744-3228.</p>
+        <p class="ask">To ask about receiving care, or to become a Stephen Minister, call the church office at <a href="tel:+12607443228">(260) 744-3228</a>.</p>
       </div>
     </div></section>
 
@@ -1440,14 +1446,6 @@ header :focus-visible,.hero :focus-visible,.page-hero :focus-visible,.season-str
   }
   window.addEventListener('hashchange',route); route();
 
-  // Copy phone
-  document.querySelectorAll('.copy').forEach(function(b){
-    b.addEventListener('click',function(){
-      var t=b.getAttribute('data-copy'), label=b.textContent;
-      var done=function(){ b.textContent='Copied '+t; setTimeout(function(){ b.textContent=label; },1600); };
-      try{ navigator.clipboard.writeText(t).then(done,function(){ b.textContent=t; }); }catch(e){ b.textContent=t; }
-    });
-  });
 
   // Church year
   function d(y,m,day){ return new Date(y,m,day); }
