@@ -1,0 +1,27 @@
+
+name: Check IONOS SSH Host Key
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Retrieve host key and fingerprint
+        run: |
+          HOST="access-5021978961.webspace-host.com"
+
+          ssh-keyscan -T 15 -t ed25519 "$HOST" \
+            2>/dev/null > known_hosts
+
+          test -s known_hosts
+
+          echo "=== KNOWN HOSTS ENTRY ==="
+          cat known_hosts
+
+          echo "=== SHA256 FINGERPRINT ==="
+          ssh-keygen -lf known_hosts -E sha256
