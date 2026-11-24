@@ -671,7 +671,10 @@ header :focus-visible,.hero :focus-visible,.page-hero :focus-visible,.season-str
 
       // Calendars: planner services + regular weekly items
       if (data.calendar && data.calendar.length) {
+        // Times for planner services that were locked before a time was entered (date → time)
+        var TIMES = { '2026-11-24': '6:30 pm' };
         var svc = data.calendar.filter(function (c) { return c.date >= today; }).map(function (c) {
+          if (!c.time && TIMES[c.date]) c.time = TIMES[c.date];
           var w = d(c.date).getUTCDay(), regular = (w === 6 && c.time === '4:00 pm') || (w === 0 && c.time === '9:00 am');
           // Ordinary Sundays read "Worship with Communion"; feasts and special services show their name
           var plain = /Sunday after (Pentecost|the Epiphany|Epiphany)/.test(c.name) && !FEAST[c.color];
