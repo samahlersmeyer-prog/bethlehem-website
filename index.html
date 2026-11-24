@@ -469,7 +469,6 @@ footer a:hover{color:var(--gold-ink);text-decoration:underline}
     <nav class="main" id="mainNav" aria-label="Main">
       <ul>
         <li><a href="#visit">Visit</a></li>
-        <li><a href="#beliefs">Beliefs</a></li>
         <li><a href="#church-life">Church Life</a></li>
         <li><a href="#food-bank">Food Bank</a></li>
         <li><a href="#news">News</a></li>
@@ -742,6 +741,16 @@ header :focus-visible,.hero :focus-visible,.page-hero :focus-visible,.season-str
   })();
   </script>
 
+  <section class="doors" aria-label="Find your way"><div class="wrap doors-grid">
+    <a class="door" href="#visit"><span class="eyebrow">New here?</span><b>Plan a visit</b><span>What to expect, communion and what we believe</span></a>
+    <a class="door" href="#church-life"><span class="eyebrow">Get involved</span><b>Church life</b><span>Bible study, groups, music and missions</span></a>
+    <a class="door" href="#food-bank"><span class="eyebrow">Tue–Thu</span><b>Food bank</b><span>Hours, current needs and how to help</span></a>
+    <a class="door" href="#news"><span class="eyebrow">Stay current</span><b>News &amp; calendar</b><span>Events, bulletins and The Messenger</span></a>
+  </div></section>
+  <style>.doors{padding-block:48px}.doors-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .door{display:flex;flex-direction:column;gap:6px;padding:22px;border:1px solid var(--line,rgba(255,255,255,.14));border-radius:10px;text-decoration:none;color:inherit;background:var(--surface)}
+  .door b{font-size:1.2rem}.door span:last-child{opacity:.8;font-size:.95rem}.door:hover{border-color:currentColor}
+  @media(max-width:860px){.doors-grid{grid-template-columns:1fr 1fr}}@media(max-width:520px){.doors-grid{grid-template-columns:1fr}}</style>
   <section class="aerial" aria-label="Bethlehem from above">
     <img src="images/aerial-view-of-bethlehem-s-662b105a.jpg" width="1800" height="1350" alt="Aerial view of Bethlehem's bell tower and red tile roof at sunset, with the sun setting over the trees of southeast Fort Wayne" loading="lazy">
     <div class="aerial-text"><div class="wrap">
@@ -750,8 +759,15 @@ header :focus-visible,.hero :focus-visible,.page-hero :focus-visible,.season-str
       <a class="btn btn-ghost" href="#visit">Plan your visit</a>
     </div></div>
   </section>
+  </div>
 
-  <section id="visit">
+  <div data-view="visit" id="visit" hidden>
+    <div class="page-hero has-photo" style="--photo:url(images/page-header-f07bb57d.jpg)"><div class="wrap">
+      <p class="eyebrow">Plan your visit</p>
+      <h1>You are welcome here</h1>
+      <p class="lede">Saturday 4:00 pm and Sunday 9:00 am on Anthony Boulevard.</p>
+    </div></div>
+  <section id="visit-sunday">
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow">Plan your visit</p>
@@ -811,54 +827,10 @@ header :focus-visible,.hero :focus-visible,.page-hero :focus-visible,.season-str
     </div>
   </section>
 
-  <section id="events">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Coming up</p>
-        <h2>This month at Bethlehem</h2>
-      </div>
-      <div class="notices">
-        <a class="notice" href="#bulletins">
-          <span class="eyebrow">Announcements</span>
-          <h3>This week's announcements</h3>
-          <p>Each Sunday's bulletin and announcements, plus our monthly newsletter, The Messenger.</p>
-          <span class="notice-go">Go to bulletins &amp; news</span>
-        </a>
-        <a class="notice" href="https://www.facebook.com/bethlehemfortwayne" target="_blank" rel="noopener">
-          <span class="eyebrow">Livestream</span>
-          <h3>Worship from home</h3>
-          <p>The 9:00 am Sunday service streams live on our Facebook page every week.</p>
-          <span class="notice-go">Open the livestream</span>
-        </a>
-        <div class="notice">
-          <span class="eyebrow">Church office</span>
-          <h3>Open weekdays 9–1</h3>
-          <p>Call <a href="tel:+12607443228">(260) 744-3228</a> or email <a href="mailto:bethfw@yahoo.com">bethfw@yahoo.com</a> with prayer requests, questions or news to share.</p>
-        </div>
-      </div>
-      <div class="events" id="homeEvents"></div>
-      <div class="events-foot">
-        <a href="#calendar">See the full calendar</a>
-        <span style="color:var(--ink-2)">Worship every Saturday at 4:00 and Sunday at 9:00.</span>
-      </div>
-    </div>
-  </section>
+  </div>
 
-  <section id="follow" class="follow"><div class="wrap follow-grid">
-    <div>
-      <p class="eyebrow">Follow along</p>
-      <h2>Bethlehem this week</h2>
-      <p class="lede">News, photos and the Sunday livestream are on Facebook. You can also follow Bethlehem on Instagram and subscribe on Substack.</p>
-      <p class="follow-links">
-        <a class="btn btn-gold" href="https://www.facebook.com/bethlehemfortwayne" target="_blank" rel="noopener">Facebook</a>
-        <a class="btn btn-line" href="https://www.instagram.com/bethlehem_fw/" target="_blank" rel="noopener">Instagram</a>
-        <a class="btn btn-line" href="https://substack.com/@bethlehemlutheranchurch" target="_blank" rel="noopener">Substack</a>
-      </p>
-    </div>
-    <div class="fb-box"><iframe title="Latest posts from Bethlehem on Facebook" src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fbethlehemfortwayne&amp;tabs=timeline&amp;width=500&amp;height=560&amp;small_header=true&amp;adapt_container_width=true&amp;hide_cover=false&amp;show_facepile=false" width="500" height="560" loading="lazy" style="border:0;overflow:hidden" scrolling="no" allow="encrypted-media"></iframe></div>
-  </div></section>
-
-  <section class="foodbank" id="food-bank">
+  <div data-view="food-bank" id="food-bank" hidden>
+  <section class="foodbank">
     <div class="fb-bg" aria-hidden="true"><img src="images/background-744b2412.jpg" alt=""></div>
     <div class="wrap fb-grid">
       <div>
@@ -897,8 +869,15 @@ header :focus-visible,.hero :focus-visible,.page-hero :focus-visible,.season-str
       </div>
     </div>
   </section>
+  </div>
 
-  <section id="about">
+  <div data-view="about" id="about" hidden>
+    <div class="page-hero has-photo" style="--photo:url(images/background-8992a9ca.jpg)"><div class="wrap">
+      <p class="eyebrow">About</p>
+      <h1>A hundred years on Anthony Boulevard</h1>
+      <p class="lede">Who we are, what we are about and how we got here.</p>
+    </div></div>
+  <section id="about-us">
     <div class="wrap">
       <div class="pastor">
         <img class="portrait-img" src="images/pastor-ben-ahlersmeyer-with-his-debe5fde.jpg" alt="Pastor Ben Ahlersmeyer with his wife, Melissa, and their two sons beside the Easter lilies in Bethlehem's chancel" width="880" height="1097" loading="lazy">
@@ -918,7 +897,6 @@ header :focus-visible,.hero :focus-visible,.page-hero :focus-visible,.season-str
       </div>
     </div>
   </section>
-
   <section id="mission">
     <div class="mission-band">
       <div class="mission-bg" aria-hidden="true"><img src="images/background-900dbca3.jpg" alt=""></div>
@@ -949,46 +927,6 @@ header :focus-visible,.hero :focus-visible,.page-hero :focus-visible,.season-str
       </ul>
     </div>
   </section>
-
-  <section id="groups">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Church life</p>
-        <h2>Find your place to grow and serve</h2>
-        <p><a class="link-btn" href="#church-life">See all of church life</a></p>
-      </div>
-      <div class="groups">
-        <div class="group"><h3>Learn</h3><ul>
-          <li><a href="#bible-study">Adult Bible Class<span class="sub">Sundays 10:30 am</span></a></li>
-          <li><a href="#bible-study">Men's Bible Study<span class="sub">Saturdays 8:30 am</span></a></li>
-          <li><a href="#christ-care">Christ Care Small Groups</a></li>
-        </ul></div>
-        <div class="group"><h3>Families</h3><ul>
-          <li><a href="#sonshine">Sonshine Club<span class="sub">Ages 4 and up, Sundays 10:30 am</span></a></li>
-          <li><a href="https://www.lsusfw.org/" target="_blank" rel="noopener">Lutheran South Unity School</a></li>
-          <li><a href="https://www.clhscadets.com/" target="_blank" rel="noopener">Concordia Lutheran High School</a></li>
-        </ul></div>
-        <div class="group"><h3>Music</h3><ul>
-          <li><a href="#music">Choir</a></li>
-          <li><a href="#music">Handbells</a></li>
-        </ul></div>
-        <div class="group"><h3>Care</h3><ul>
-          <li><a href="#stephen-ministry">Stephen Ministry<span class="sub">One-to-one care in hard seasons</span></a></li>
-          <li><a href="#women">Women of Bethlehem</a></li>
-        </ul></div>
-        <div class="group"><h3>Missions</h3><ul>
-          <li><a href="#liberia">Liberian Children's Mission</a></li>
-          <li><a href="#agape-france">Agape France (Cru)<span class="sub">The Schlie family in Paris</span></a></li>
-        </ul></div>
-        <div class="group" id="members"><h3>For members</h3><ul>
-          <li><a href="#bulletins">Bulletins</a></li>
-          <li><a href="#messenger">The Messenger newsletter</a></li>
-          <li><a href="#schedules">Serving schedules<span class="sub">Acolytes, altar guild, elders, ushers, readers and more</span></a></li>
-        </ul></div>
-      </div>
-    </div>
-  </section>
-
   <section class="history" id="history">
     <div class="wrap">
       <div class="history-head">
@@ -1038,7 +976,6 @@ header :focus-visible,.hero :focus-visible,.page-hero :focus-visible,.season-str
       </div>
     </div>
   </section>
-
   <section class="mission" id="give">
     <div class="wrap">
       <div>
@@ -1053,6 +990,7 @@ header :focus-visible,.hero :focus-visible,.page-hero :focus-visible,.season-str
     </div>
   </section>
   </div>
+
 
 
   <div data-view="our-story" hidden>
@@ -1313,6 +1251,44 @@ header :focus-visible,.hero :focus-visible,.page-hero :focus-visible,.season-str
         </article>
       </div>
     </div></section>
+  <section id="groups">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Church life</p>
+        <h2>Find your place to grow and serve</h2>
+        <p><a class="link-btn" href="#church-life">See all of church life</a></p>
+      </div>
+      <div class="groups">
+        <div class="group"><h3>Learn</h3><ul>
+          <li><a href="#bible-study">Adult Bible Class<span class="sub">Sundays 10:30 am</span></a></li>
+          <li><a href="#bible-study">Men's Bible Study<span class="sub">Saturdays 8:30 am</span></a></li>
+          <li><a href="#christ-care">Christ Care Small Groups</a></li>
+        </ul></div>
+        <div class="group"><h3>Families</h3><ul>
+          <li><a href="#sonshine">Sonshine Club<span class="sub">Ages 4 and up, Sundays 10:30 am</span></a></li>
+          <li><a href="https://www.lsusfw.org/" target="_blank" rel="noopener">Lutheran South Unity School</a></li>
+          <li><a href="https://www.clhscadets.com/" target="_blank" rel="noopener">Concordia Lutheran High School</a></li>
+        </ul></div>
+        <div class="group"><h3>Music</h3><ul>
+          <li><a href="#music">Choir</a></li>
+          <li><a href="#music">Handbells</a></li>
+        </ul></div>
+        <div class="group"><h3>Care</h3><ul>
+          <li><a href="#stephen-ministry">Stephen Ministry<span class="sub">One-to-one care in hard seasons</span></a></li>
+          <li><a href="#women">Women of Bethlehem</a></li>
+        </ul></div>
+        <div class="group"><h3>Missions</h3><ul>
+          <li><a href="#liberia">Liberian Children's Mission</a></li>
+          <li><a href="#agape-france">Agape France (Cru)<span class="sub">The Schlie family in Paris</span></a></li>
+        </ul></div>
+        <div class="group" id="members"><h3>For members</h3><ul>
+          <li><a href="#bulletins">Bulletins</a></li>
+          <li><a href="#messenger">The Messenger newsletter</a></li>
+          <li><a href="#schedules">Serving schedules<span class="sub">Acolytes, altar guild, elders, ushers, readers and more</span></a></li>
+        </ul></div>
+      </div>
+    </div>
+  </section>
   </div>
 
   <div data-view="news" hidden>
@@ -1323,6 +1299,51 @@ header :focus-visible,.hero :focus-visible,.page-hero :focus-visible,.season-str
       <nav class="jump" aria-label="On this page"><a href="#calendar">Calendar</a><a href="#bulletins">Bulletins</a><a href="#messenger">The Messenger</a><a href="#schedules">Serving schedules</a></nav>
     </div></div>
 
+      <section id="events">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Coming up</p>
+        <h2>This month at Bethlehem</h2>
+      </div>
+      <div class="notices">
+        <a class="notice" href="#bulletins">
+          <span class="eyebrow">Announcements</span>
+          <h3>This week's announcements</h3>
+          <p>Each Sunday's bulletin and announcements, plus our monthly newsletter, The Messenger.</p>
+          <span class="notice-go">Go to bulletins &amp; news</span>
+        </a>
+        <a class="notice" href="https://www.facebook.com/bethlehemfortwayne" target="_blank" rel="noopener">
+          <span class="eyebrow">Livestream</span>
+          <h3>Worship from home</h3>
+          <p>The 9:00 am Sunday service streams live on our Facebook page every week.</p>
+          <span class="notice-go">Open the livestream</span>
+        </a>
+        <div class="notice">
+          <span class="eyebrow">Church office</span>
+          <h3>Open weekdays 9–1</h3>
+          <p>Call <a href="tel:+12607443228">(260) 744-3228</a> or email <a href="mailto:bethfw@yahoo.com">bethfw@yahoo.com</a> with prayer requests, questions or news to share.</p>
+        </div>
+      </div>
+      <div class="events" id="homeEvents"></div>
+      <div class="events-foot">
+        <a href="#calendar">See the full calendar</a>
+        <span style="color:var(--ink-2)">Worship every Saturday at 4:00 and Sunday at 9:00.</span>
+      </div>
+    </div>
+  </section>
+  <section id="follow" class="follow"><div class="wrap follow-grid">
+    <div>
+      <p class="eyebrow">Follow along</p>
+      <h2>Bethlehem this week</h2>
+      <p class="lede">News, photos and the Sunday livestream are on Facebook. You can also follow Bethlehem on Instagram and subscribe on Substack.</p>
+      <p class="follow-links">
+        <a class="btn btn-gold" href="https://www.facebook.com/bethlehemfortwayne" target="_blank" rel="noopener">Facebook</a>
+        <a class="btn btn-line" href="https://www.instagram.com/bethlehem_fw/" target="_blank" rel="noopener">Instagram</a>
+        <a class="btn btn-line" href="https://substack.com/@bethlehemlutheranchurch" target="_blank" rel="noopener">Substack</a>
+      </p>
+    </div>
+    <div class="fb-box"><iframe title="Latest posts from Bethlehem on Facebook" src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fbethlehemfortwayne&amp;tabs=timeline&amp;width=500&amp;height=560&amp;small_header=true&amp;adapt_container_width=true&amp;hide_cover=false&amp;show_facepile=false" width="500" height="560" loading="lazy" style="border:0;overflow:hidden" scrolling="no" allow="encrypted-media"></iframe></div>
+  </div></section>
     <section id="calendar"><div class="wrap">
       <div class="section-head"><p class="eyebrow">Calendar</p><h2>Coming up</h2></div>
       <div class="week">
