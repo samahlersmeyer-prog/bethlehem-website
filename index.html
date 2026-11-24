@@ -682,15 +682,15 @@ header :focus-visible,.hero :focus-visible,.page-hero :focus-visible,.season-str
         var p = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Indiana/Indianapolis', hour: 'numeric', minute: 'numeric', hourCycle: 'h23' }).formatToParts(new Date());
         var part = function (k) { return +p.filter(function (x) { return x.type === k; })[0].value; };
         var nowM = part('hour') * 60 + part('minute');
-        var nx0 = svc.filter(function (c) { return c.time && (c.date > today || mins(c.time) + 60 > nowM); })[0];
+        var nx0 = svc.filter(function (c) { return c.date > today || !c.time || mins(c.time) + 60 > nowM; })[0];
         if (nx0) {
-          var live = nx0.date === today && mins(nx0.time) <= nowM;
+          var live = nx0.time && nx0.date === today && mins(nx0.time) <= nowM;
           var days = Math.round((d(nx0.date) - d(today)) / 864e5);
           var when = days === 0 ? 'Today' : days === 1 ? 'Tomorrow' : days < 7 ? DOWL[d(nx0.date).getUTCDay()] : DOWL[d(nx0.date).getUTCDay()] + ', ' + md(d(nx0.date));
           var sunday = nx0.worship && d(nx0.date).getUTCDay() === 0;
           $('nextLabel').textContent = live ? 'Happening now' : 'Next service';
           $('nextText').textContent = live ? 'Worship is underway. Join us or watch on Facebook.'
-            : when + ' at ' + nx0.time + (nx0.worship ? '' : ' · ' + nx0.name) + (sunday ? ' · also streamed live' : '');
+            : when + (nx0.time ? ' at ' + nx0.time : '') + (nx0.worship ? '' : ' · ' + nx0.name) + (sunday ? ' · also streamed live' : '');
         }
         var last = svc.length ? svc[svc.length - 1].date : today;
         var span = Math.min(56, Math.round((d(last) - d(today)) / 864e5));
