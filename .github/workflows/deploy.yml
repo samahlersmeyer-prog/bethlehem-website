@@ -46,6 +46,6 @@ jobs:
             "sftp://$SFTP_HOST:22" <<'EOF'
           set sftp:connect-program "ssh -a -x -o StrictHostKeyChecking=yes"
           set net:max-retries 2
-          mirror --reverse --verbose site/ ./
+          mirror --reverse --verbose site/ /public/bethlehem-live/
           bye
           EOF
