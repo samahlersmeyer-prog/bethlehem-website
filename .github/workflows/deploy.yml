@@ -36,7 +36,8 @@ jobs:
           printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
-      - name: Upload website to IONOS
+      
+      - name: Diagnose IONOS SFTP directories
         env:
           SFTP_HOST: ${{ secrets.SFTP_HOST }}
           SFTP_USERNAME: ${{ secrets.SFTP_USERNAME }}
@@ -45,7 +46,10 @@ jobs:
           lftp -u "$SFTP_USERNAME","$SFTP_PASSWORD" \
             "sftp://$SFTP_HOST:22" <<'EOF'
           set sftp:connect-program "ssh -a -x -o StrictHostKeyChecking=yes"
-          set net:max-retries 2
-          mirror --reverse --verbose site/ /public/bethlehem-live/
+          pwd
+          cls -la
+          cd /public/bethlehem-live
+          pwd
+          cls -la
           bye
           EOF
